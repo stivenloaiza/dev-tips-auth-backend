@@ -1,6 +1,5 @@
 // Importa las dependencias necesarias
 import { Test, TestingModule } from '@nestjs/testing';
-import { UnauthorizedException } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../app.module'; 
 
