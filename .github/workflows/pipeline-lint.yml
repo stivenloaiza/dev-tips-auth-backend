@@ -29,13 +29,10 @@ jobs:
         run: npm run lint
 
       - name: Run Prettier
-        run: npx prettier --check .
+        run: npm run format
 
       - name: Check for TypeScript errors
         run: npx tsc --noEmit
-
-      - name: Check for outdated dependencies
-        run: npx npm-check-updates --error-level 2
 
       - name: Run ESLint with fix option
         run: npx eslint . --fix

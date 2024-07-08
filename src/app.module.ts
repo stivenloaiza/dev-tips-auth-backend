@@ -7,12 +7,13 @@ import dbConfig from './libs/persistence/db.config';
 
 @Module({
   imports: [
-      ConfigModule.forRoot({
-        envFilePath: '.env',
-        load: [dbConfig],
-        isGlobal: true,
-      }),
-    PersistenceModule],
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+      load: [dbConfig],
+      isGlobal: true,
+    }),
+    PersistenceModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
