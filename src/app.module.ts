@@ -3,7 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ApiKeyMiddleware } from './libs/middleware/api-key.middleware';
 
-
 @Module({
   imports: [],
   controllers: [AppController],
@@ -11,8 +10,6 @@ import { ApiKeyMiddleware } from './libs/middleware/api-key.middleware';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(ApiKeyMiddleware)
-      .forRoutes('*');
+    consumer.apply(ApiKeyMiddleware).forRoutes('*');
   }
 }
