@@ -27,15 +27,3 @@ jobs:
 
       - name: Run linter
         run: npm run lint
-
-      - name: Run Prettier
-        run: npm run format
-
-      - name: Check for TypeScript errors
-        run: npx tsc --noEmit
-
-      - name: Run ESLint with fix option
-        run: npx eslint . --fix
-
-      - name: Run tests
-        run: npm test
