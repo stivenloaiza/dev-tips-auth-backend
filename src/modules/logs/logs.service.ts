@@ -6,9 +6,7 @@ import { Log, LogDocument } from './entities/logs.entity';
 
 @Injectable()
 export class LogsService {
-  constructor(
-    @InjectModel(Log.name) private logModel: Model<LogDocument>,
-  ) {}
+  constructor(@InjectModel(Log.name) private logModel: Model<LogDocument>) {}
 
   async create(createLogDto: CreateLogDto): Promise<Log> {
     const createdLog = new this.logModel(createLogDto);
@@ -28,7 +26,9 @@ export class LogsService {
   }
 
   async update(id: string, updateLogDto: CreateLogDto): Promise<Log> {
-    const existingLog = await this.logModel.findByIdAndUpdate(id, updateLogDto, { new: true }).exec();
+    const existingLog = await this.logModel
+      .findByIdAndUpdate(id, updateLogDto, { new: true })
+      .exec();
     if (!existingLog) {
       throw new NotFoundException(`Log #${id} not found`);
     }
