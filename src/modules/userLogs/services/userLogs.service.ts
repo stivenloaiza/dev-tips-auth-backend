@@ -32,7 +32,7 @@ export class UserLogService {
         .exec();
       if (existingUserLogs) {
         throw new HttpException(
-          `User log with username ${createUserLogsDto.username} or apiKey ${createUserLogsDto.apiKey} already exists`,
+          `User Log with username ${createUserLogsDto.username} or apiKey ${createUserLogsDto.apiKey} already exists`,
           HttpStatus.BAD_REQUEST,
         );
       }
@@ -43,7 +43,7 @@ export class UserLogService {
       if (error instanceof HttpException) {
         throw error;
       } else {
-        throw new NotFoundException('Error creating user log');
+        throw new NotFoundException('Error creating User Log');
       }
     }
   }
@@ -58,7 +58,7 @@ export class UserLogService {
 
     if (!userLogs) {
       throw new HttpException(
-        `UserLog with id ${id} not found`,
+        `User Log with id ${id} not found`,
         HttpStatus.NOT_FOUND,
       );
     }
@@ -76,20 +76,20 @@ export class UserLogService {
 
     if (!updatedUserLog) {
       throw new NotFoundException(
-        `UserLogs for user with ID '${id}' not found.`,
+        `User Logs for user with ID '${id}' not found.`,
       );
     }
 
     return updatedUserLog.toObject({ versionKey: false });
   }
 
-  async remove(id: string): Promise<void> {
+  async delete(id: string): Promise<void> {
     const deleteUserLogs = await this.userLogsModel
       .findByIdAndDelete(id)
       .exec();
     if (!deleteUserLogs) {
       throw new HttpException(
-        `UserLogs with id ${id} not found`,
+        `User Log with id ${id} not found`,
         HttpStatus.NOT_FOUND,
       );
     }
@@ -111,7 +111,7 @@ export class UserLogService {
   async blockUser(id: string): Promise<UserLogs> {
     const user = await this.userLogsModel.findById(id).exec();
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('User Log not found');
     }
     user.isBlocked = true;
     user.blockedAt = new Date();
