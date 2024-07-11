@@ -10,7 +10,6 @@ import {
   import { ApiKey, ApiKeyDocument } from '../entities/api-key.entity';
   import { CreateApiKeyDto } from '../dtos/createApiKey.dto';
   import { UpdateApiKeyDto } from '../dtos/updateApiKey.dto';
- 
   
   @Injectable()
   export class AuthService {
