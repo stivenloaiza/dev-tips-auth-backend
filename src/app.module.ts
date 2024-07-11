@@ -5,6 +5,7 @@ import { PersistenceModule } from './libs/persistence/persistence.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthService } from './auth/auth.service';
 import dbConfig from './libs/persistence/db.config';
+import { UserLogsModule } from './modules/userLogs/userLogs.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import dbConfig from './libs/persistence/db.config';
       isGlobal: true,
     }),
     PersistenceModule,
+    UserLogsModule,
   ],
   controllers: [AppController],
   providers: [AppService, AuthService],
