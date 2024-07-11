@@ -39,4 +39,5 @@ export class ApiKeySubscription {
   deleteBy: string;
 }
 
-export const ApiKeySubscriptionSchema = SchemaFactory.createForClass(ApiKeySubscription);
+export const ApiKeySubscriptionSchema =
+  SchemaFactory.createForClass(ApiKeySubscription);
