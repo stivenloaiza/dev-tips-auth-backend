@@ -11,7 +11,6 @@ import {
   import { CreateApiKeyDto } from '../dtos/createApiKey.dto';
   import { UpdateApiKeyDto } from '../dtos/updateApiKey.dto';
   
-  
   @Injectable()
   export class AuthService {
     private readonly logger = new Logger(AuthService.name);
