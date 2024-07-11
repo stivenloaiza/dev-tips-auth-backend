@@ -3,9 +3,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PersistenceModule } from './libs/persistence/persistence.module';
 import { ConfigModule } from '@nestjs/config';
-import { AuthService } from './auth/auth.service';
 import dbConfig from './libs/persistence/db.config';
 import { UserLogsModule } from './modules/userLogs/userLogs.module';
+import { ApiKeyModule } from './libs/auth/api-key.module';
+import { ApiKeySubscriptionModule } from './libs/apiKeySubs/apikeyUser.module';
+import { LogsModule } from './modules/logs/logs.module';
 
 @Module({
   imports: [
@@ -14,10 +16,13 @@ import { UserLogsModule } from './modules/userLogs/userLogs.module';
       load: [dbConfig],
       isGlobal: true,
     }),
-    PersistenceModule,
+    ApiKeyModule,
     UserLogsModule,
+    ApiKeySubscriptionModule,
+    LogsModule,
+    PersistenceModule,
   ],
   controllers: [AppController],
-  providers: [AppService, AuthService],
+  providers: [AppService],
 })
 export class AppModule {}

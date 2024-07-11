@@ -1,23 +1,23 @@
-import { Injectable } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import {
   ApiKeySubscription,
   ApiKeySubscriptionDocument,
-} from "../entities/apiKeySubs.entity";
-import { CreateApiKeySubscriptionDto } from "../dtos/create-apy-key-subs.dto";
-import { UpdateApiKeySubscriptionDto } from "../dtos/update-apy-key-subs.dto";
+} from '../entities/apiKeySubs.entity';
+import { CreateApiKeySubscriptionDto } from '../dtos/create-apy-key-subs.dto';
+import { UpdateApiKeySubscriptionDto } from '../dtos/update-apy-key-subs.dto';
 
 @Injectable()
 export class ApiKeySubscriptionService {
   constructor(
     @InjectModel(ApiKeySubscription.name)
-    private apiKeySubscriptionModel: Model<ApiKeySubscriptionDocument>
+    private apiKeySubscriptionModel: Model<ApiKeySubscriptionDocument>,
   ) {}
 
   async generateApiKey(type: string): Promise<string> {
     let apiKey = `${type}-${Math.random().toString(36).substr(2, 7)}`;
-    if (type === "tv") {
+    if (type === 'tv') {
       while (apiKey.length > 9) {
         apiKey = `${type}-${Math.random().toString(36).substr(2, 7)}`;
       }
@@ -43,19 +43,19 @@ export class ApiKeySubscriptionService {
   async cancelSubscription(type: string): Promise<void> {
     await this.apiKeySubscriptionModel.updateMany(
       { type },
-      { isActive: false }
+      { isActive: false },
     );
   }
 
   async deactivateApiKey(apiKey: string): Promise<void> {
     await this.apiKeySubscriptionModel.updateOne(
       { apiKey },
-      { isActive: false }
+      { isActive: false },
     );
   }
 
   async createApiKeySubscription(
-    createApiKeySubscriptionDto: CreateApiKeySubscriptionDto
+    createApiKeySubscriptionDto: CreateApiKeySubscriptionDto,
   ): Promise<ApiKeySubscription> {
     const apiKey = await this.generateApiKey(createApiKeySubscriptionDto.type);
     const createdApiKeySubscription = new this.apiKeySubscriptionModel({
@@ -68,20 +68,20 @@ export class ApiKeySubscriptionService {
 
   async updateApiKeySubscription(
     apiKey: string,
-    updateApiKeySubscriptionDto: UpdateApiKeySubscriptionDto
+    updateApiKeySubscriptionDto: UpdateApiKeySubscriptionDto,
   ): Promise<ApiKeySubscription> {
-    const updatedSubscription = await this.apiKeySubscriptionModel.findOneAndUpdate(
-      { apiKey },
-      { $set: updateApiKeySubscriptionDto },
-      { new: true }
-    );
+    const updatedSubscription =
+      await this.apiKeySubscriptionModel.findOneAndUpdate(
+        { apiKey },
+        { $set: updateApiKeySubscriptionDto },
+        { new: true },
+      );
     return updatedSubscription;
   }
 
   async deleteApiKeySubscription(apiKey: string): Promise<ApiKeySubscription> {
-    const deletedSubscription = await this.apiKeySubscriptionModel.findOneAndDelete(
-      { apiKey }
-    );
+    const deletedSubscription =
+      await this.apiKeySubscriptionModel.findOneAndDelete({ apiKey });
     return deletedSubscription;
   }
 
