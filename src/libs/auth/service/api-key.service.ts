@@ -73,7 +73,7 @@ export class AuthService {
       const isMatch = await bcrypt.compare(key, apiKey.key);
       if (isMatch) {
         this.logger.log(`API key matched`);
-        await this.updateLastUsed(apiKey.id);
+        await this.updateLastUsed(apiKey.id); // Actualizamos la fecha de último uso
         return true;
       }
     }
