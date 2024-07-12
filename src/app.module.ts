@@ -6,8 +6,8 @@ import { UserLogsModule } from './modules/userLogs/userLogs.module';
 import { ApiKeyModule } from './libs/auth/api-key.module';
 import { ApiKeySubscriptionModule } from './libs/apiKeySubs/apikeyUser.module';
 import { LogsModule } from './modules/logs/logs.module';
-import { AuthGuard } from './libs/auth/guard/api-key.guard';
 import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './libs/auth/guard/api-key.guard';
 
 @Module({
   imports: [

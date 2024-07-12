@@ -7,7 +7,6 @@ import {
   Logger,
 } from '@nestjs/common';
 import { AuthService } from '../service/api-key.service';
-
 @Injectable()
 export class AuthGuard implements CanActivate {
   private readonly logger = new Logger(AuthGuard.name);
