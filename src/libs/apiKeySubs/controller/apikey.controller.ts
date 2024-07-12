@@ -37,6 +37,11 @@ export class ApiKeySubscriptionController {
     );
   }
 
+  @Post('validate')
+  async validateApiKey(@Body('apiKey') apiKey: string) {
+    return this.apiKeySubscriptionService.validateApiKey(apiKey);
+  }
+
   @Get('all')
   @ApiOperation({ summary: 'Get all API key subscriptions' })
   @ApiResponse({

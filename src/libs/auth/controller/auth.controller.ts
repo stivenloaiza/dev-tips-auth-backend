@@ -30,6 +30,11 @@ export class AuthController {
     }
   }
 
+  @Post('validate')
+  async validateApiKey(@Body('key') key: string) {
+    return this.apiKeyService.validateApiKey(key);
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string) {
     try {
