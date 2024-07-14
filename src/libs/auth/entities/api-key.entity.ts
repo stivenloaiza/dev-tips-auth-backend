@@ -5,9 +5,6 @@ export type ApiKeyDocument = ApiKey & Document;
 
 @Schema({ timestamps: true })
 export class ApiKey {
-  @Prop({ unique: true })
-  id: string;
-
   @Prop({ required: true })
   system_name: string;
 
