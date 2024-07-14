@@ -6,7 +6,7 @@ export type ApiKeySubscriptionDocument = ApiKeySubscription & Document;
 @Schema()
 export class ApiKeySubscription {
   @Prop({ required: true })
-  type: string;
+  typeSubscription: string;
 
   @Prop({ required: true })
   apiKey: string;
