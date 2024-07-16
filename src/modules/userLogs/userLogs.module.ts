@@ -10,8 +10,8 @@ import { UserLogsController } from './controller/userLogs.controller';
       { name: UserLogs.name, schema: UserLogsSchema },
     ]),
   ],
-  providers: [UserLogService],
   controllers: [UserLogsController],
+  providers: [UserLogService],
   exports: [UserLogService],
 })
 export class UserLogsModule {}

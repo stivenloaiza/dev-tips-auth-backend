@@ -102,43 +102,50 @@ These steps will allow you to execute the project. Additionally, you must develo
 ## Running the App
 
 ```bash
-# development
 $ npm run start
+```
 
-# watch mode
+### Watch mode
+
+To start the application in watch mode (automatically restarts on code changes):
+
+```bash
 $ npm run start:dev
+```
 
-# production mode
+### Production mode
+
+To start the application in production mode:
+
+```bash
 $ npm run start:prod
 ```
 
-## Queries in Postman and Swagger
+## Test
 
-...
+```bash
+# unit tests
+$ npm run test
 
+# e2e tests
+$ npm run test:e2e
 
-## Gitflow Branching Strategy
+# test coverage
+$ npm run test:cov
+```
 
-This project follows the Gitflow strategy, a robust model for software development. Here is how the branches are organized and their purpose:
+## Support
 
-* `main:` Main branch with stable code for production. 
-* `dev:` Development branch with the latest features before production. 
-* `feat/AT-20-NameTask:` Branch of tasks with functionalities, identified by a Jira ID in addition to the task name.
+Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
-The work is integrated into the 'dev' branch for integration testing. Once 'dev' is stable and ready to be released, it is merged into 'main'.
+## Stay in touch
 
-If you want to contribute to the project, create a new branch from 'dev' using the appropriate prefix (feat/AT-20-NameTask). After finishing your work and testing, open a Pull Request towards 'dev'.
-
-## Participants
-
-The participants in the creation process during the "Microservices with Authentication and Tip Management" project were:
-
-* Julian Roman.
-* Camilo Manco.
-* Angelica Hernandez.
-* Hernan.
-* Camila Sepulveda
+- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
+- Website - [https://nestjs.com](https://nestjs.com/)
+- Twitter - [@nestframework](https://twitter.com/nestframework)
 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+```
+

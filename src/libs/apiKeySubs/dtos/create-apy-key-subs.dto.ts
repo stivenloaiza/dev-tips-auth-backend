@@ -22,7 +22,7 @@ export class CreateApiKeySubscriptionDto {
     example: 'abc123',
   })
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   apiKey: string;
 
   @ApiProperty({

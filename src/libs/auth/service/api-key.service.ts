@@ -3,6 +3,7 @@ import {
   NotFoundException,
   Logger,
   InternalServerErrorException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -22,78 +23,133 @@ export class AuthService {
   async createApiKey(
     createApiKeyDto: CreateApiKeyDto,
   ): Promise<{ key: string; isActive: boolean }> {
-    const key = await this.generateApiKey();
-    const hashedKey = await bcrypt.hash(key, 10);
-    const newApiKey = new this.apiKeyModel({
-      ...createApiKeyDto,
-      key: hashedKey,
-    });
-    await newApiKey.save();
-    return { key, isActive: newApiKey.isActive };
+    try {
+      const key = await this.generateApiKey();
+      const hashedKey = await bcrypt.hash(key, 10);
+      const newApiKey = new this.apiKeyModel({
+        ...createApiKeyDto,
+        key: hashedKey,
+      });
+      await newApiKey.save();
+      return { key, isActive: newApiKey.isActive };
+    } catch (error) {
+      this.logger.error('Error creating API key', error.stack);
+      throw new InternalServerErrorException('Error creating API key');
+    }
   }
 
   async getApiKey(id: string): Promise<ApiKey> {
-    const apiKey = await this.apiKeyModel.findById(id).exec();
-    if (!apiKey) {
-      throw new NotFoundException('API Key not found');
+    try {
+      const apiKey = await this.apiKeyModel.findById(id).exec();
+      if (!apiKey) {
+        throw new NotFoundException('API Key not found');
+      }
+      return await apiKey;
+    } catch (error) {
+      this.logger.error(`Error getting API key with id: ${id}`, error.stack);
+      throw new InternalServerErrorException('Error getting API key');
     }
-    return apiKey;
   }
 
   async updateApiKey(
     id: string,
     updateApiKeyDto: UpdateApiKeyDto,
   ): Promise<ApiKey> {
-    const updatedApiKey = await this.apiKeyModel
-      .findByIdAndUpdate(id, updateApiKeyDto, { new: true })
-      .exec();
-    if (!updatedApiKey) {
-      throw new NotFoundException('API Key not found');
+    try {
+      const updatedApiKey = await this.apiKeyModel
+        .findByIdAndUpdate(id, updateApiKeyDto, { new: true })
+        .exec();
+      if (!updatedApiKey) {
+        throw new NotFoundException('API Key not found');
+      }
+      return await updatedApiKey;
+    } catch (error) {
+      this.logger.error(`Error updating API key with id: ${id}`, error.stack);
+      throw new InternalServerErrorException('Error updating API key');
     }
-    return updatedApiKey;
   }
 
   async revokeApiKey(id: string): Promise<void> {
-    const apiKey = await this.apiKeyModel.findById(id).exec();
-    if (!apiKey) {
-      throw new NotFoundException('API Key not found');
+    try {
+      const apiKey = await this.apiKeyModel.findById(id).exec();
+      if (!apiKey) {
+        throw new NotFoundException('API Key not found');
+      }
+      apiKey.isActive = false;
+      await apiKey.save();
+    } catch (error) {
+      this.logger.error(`Error revoking API key with id: ${id}`, error.stack);
+      throw new InternalServerErrorException('Error revoking API key');
     }
-    apiKey.isActive = false;
-    await apiKey.save();
   }
 
-  async findAll(page: number, limit: number): Promise<ApiKey[]> {
-    const skip = (page - 1) * limit;
-    return this.apiKeyModel.find().skip(skip).limit(limit).exec();
+  async findAll(page: number = 1, limit: number = 10): Promise<ApiKey[]> {
+    try {
+      const apiKeys = await this.apiKeyModel
+        .find({ isActive: true })
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .exec();
+      if (!apiKeys.length) {
+        throw new NotFoundException('No API keys found');
+      }
+      return await apiKeys;
+    } catch (error) {
+      this.logger.error('Error retrieving API keys', error.stack);
+      throw new InternalServerErrorException('Error retrieving API keys');
+    }
   }
 
   async validateApiKey(key: string): Promise<boolean> {
-    const apiKeys = await this.apiKeyModel.find({ isActive: true }).exec();
-    for (const apiKey of apiKeys) {
-      const isMatch = await bcrypt.compare(key, apiKey.key);
-      if (isMatch) {
-        this.logger.log(`API key matched`);
-        await this.updateLastUsed(apiKey.id); // Actualizamos la fecha de último uso
-        return true;
+    try {
+      const apiKeys = await this.apiKeyModel.find({ isActive: true }).exec();
+      for (const apiKey of apiKeys) {
+        const isMatch = await bcrypt.compare(key, apiKey.key);
+        if (isMatch) {
+          if (
+            apiKey.maxUsage !== null &&
+            apiKey.usageCount >= apiKey.maxUsage
+          ) {
+            apiKey.isActive = false;
+            await apiKey.save();
+            this.logger.warn(`API key usage limit reached: ${key}`);
+            throw new ForbiddenException('API key usage limit reached');
+          }
+          apiKey.usageCount++;
+          await apiKey.save();
+          this.logger.log(`API key matched and validated`);
+          await this.updateLastUsed(apiKey.id);
+          return true;
+        }
       }
+      return false;
+    } catch (error) {
+      this.logger.error('Error validating API key', error.stack);
+      throw new InternalServerErrorException('Error validating API key');
     }
-    return false;
   }
 
   private async updateLastUsed(apiKeyId: string): Promise<void> {
     try {
       await this.apiKeyModel
-        .findOneAndUpdate({ id: apiKeyId }, { lastUsedAt: new Date() })
+        .findOneAndUpdate({ _id: apiKeyId }, { lastUsedAt: new Date() })
         .exec();
     } catch (error) {
-      this.logger.error(`Error updating lastUsedAt for id: ${apiKeyId}`, error);
+      this.logger.error(
+        `Error updating lastUsedAt for id: ${apiKeyId}`,
+        error.stack,
+      );
       throw new InternalServerErrorException('Error updating lastUsedAt');
     }
   }
 
   private async generateApiKey(): Promise<string> {
-    return [...Array(30)]
-      .map(() => ((Math.random() * 36) | 0).toString(36))
-      .join('');
+    try {
+      return await [...Array(30)]
+        .map(() => ((Math.random() * 36) | 0).toString(36))
+        .join('');
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 }
