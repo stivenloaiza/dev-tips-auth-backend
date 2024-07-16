@@ -34,13 +34,13 @@ To install the project, follow these steps:
 1. Clone the repository:
 
 ```bash
-$ git clone https://github.com/yourusername/yourrepository.git
+$ git clone https://github.com/stivenloaiza/dev-tips-auth-backend.git
 ```
 
 2. Navigate to the project directory:
 
 ```bash
-$ cd yourrepository
+$ cd dev-tips-auth-backend
 ```
 
 3. Install the dependencies:
