@@ -22,7 +22,7 @@ export class ApiKeySubscriptionService {
 
   private async generateApiKey(type: string): Promise<string> {
     try {
-      const length = type === 'tvs' ? 15 : 30;
+      const length = type === 'tvs' ? 6 : 20;
       return await [...Array(length)]
         .map(() => ((Math.random() * 36) | 0).toString(36))
         .join('');
@@ -35,10 +35,10 @@ export class ApiKeySubscriptionService {
     createApiKeySubscriptionDto: CreateApiKeySubscriptionDto,
   ): Promise<ApiKeySubscription> {
     try {
-      const { typeSubscription, limit } = createApiKeySubscriptionDto;
-      const apiKey = await this.generateApiKey(typeSubscription);
+      const { type, limit } = createApiKeySubscriptionDto;
+      const apiKey = await this.generateApiKey(type);
       const newApiKeySubscription = await new this.apiKeySubscriptionModel({
-        typeSubscription,
+        type,
         apiKey,
         limit,
       });
