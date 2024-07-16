@@ -15,7 +15,7 @@ export class CreateApiKeySubscriptionDto {
   })
   @IsString()
   @IsNotEmpty()
-  typeSubscription: string;
+  type: string;
 
   @ApiProperty({
     description: 'API key for the subscription',

@@ -26,12 +26,12 @@ export class AuthService {
     try {
       const key = await this.generateApiKey();
       const hashedKey = await bcrypt.hash(key, 10);
-      const newApiKey = await new this.apiKeyModel({
+      const newApiKey = new this.apiKeyModel({
         ...createApiKeyDto,
         key: hashedKey,
       });
       await newApiKey.save();
-      return await { key, isActive: newApiKey.isActive };
+      return { key, isActive: newApiKey.isActive };
     } catch (error) {
       this.logger.error('Error creating API key', error.stack);
       throw new InternalServerErrorException('Error creating API key');
