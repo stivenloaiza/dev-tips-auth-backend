@@ -9,7 +9,6 @@ import {
 import { ApiTags, ApiOperation, ApiResponse, ApiBadRequestResponse, ApiInternalServerErrorResponse, ApiBody, ApiQuery } from '@nestjs/swagger';
 import { ApiKeySubscriptionService } from '../service/apiKeySubs.service';
 import { CreateApiKeySubscriptionDto } from '../dtos/create-apy-key-subs.dto';
-import { UpdateApiKeySubscriptionDto } from '../dtos/update-apy-key-subs.dto';
 
 @ApiTags('Key Subscriptions')
 @Controller('key-subscription')
