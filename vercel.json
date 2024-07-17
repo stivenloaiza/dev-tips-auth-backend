@@ -1,0 +1,37 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "tsconfig.json",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "dist/main.js"
+    }
+  ],
+  "env": {
+    "DB_USERNAME": "@db-username",
+    "DB_PASSWORD": "@db-password",
+    "DB_HOST_REMOTE": "@db-host-remote",
+    "DB_NAME_REMOTE": "@db-name-remote",
+    "ENVIRONMENT": "@environment",
+    "PORT": "@port"
+  },
+  "build": {
+    "env": {
+      "DB_USERNAME": "cristian",
+      "DB_PASSWORD": "sdkUoIlDhdNFwiuu",
+      "DB_HOST_REMOTE": "auth-tips.vcmizhc.mongodb.net",
+      "DB_NAME_REMOTE": "Auth_microservices",
+      "ENVIRONMENT": "production",
+      "PORT": "3002"
+    }
+  }
+}
