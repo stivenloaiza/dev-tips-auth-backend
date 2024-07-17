@@ -1,4 +1,4 @@
-import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { PersistenceModule } from './libs/persistence/persistence.module';
 import { ConfigModule } from '@nestjs/config';
 import dbConfig from './libs/persistence/db.config';
@@ -7,8 +7,6 @@ import { AuthGuard } from './libs/auth/guard/api-key.guard';
 import { ApiKeyModule } from './libs/auth/api-key.module';
 import { ApiKeySubscriptionModule } from './libs/apiKeySubs/apikeyUser.module';
 import { UserLogsModule } from './modules/userLogs/userLogs.module';
-import { ApiKeyMiddleware } from './libs/middleware/api-key.middleware';
-
 
 @Module({
   imports: [
@@ -29,8 +27,4 @@ import { ApiKeyMiddleware } from './libs/middleware/api-key.middleware';
     },
   ],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(ApiKeyMiddleware).forRoutes('*');
-  }
-}
+export class AppModule {}

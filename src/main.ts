@@ -11,15 +11,15 @@ async function bootstrap() {
   // Aplica el filtro de excepciones globalmente
   app.useGlobalFilters(new UnauthorizedExceptionFilter());
 
-  const port = process.env.PORT || 3000;
-
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors();
 
   const config = new DocumentBuilder()
     .setTitle('API de Microservicio')
-    .setDescription('Microservices for authentication, registration and management of technological tips.')
+    .setDescription(
+      'Microservices for authentication, registration and management of technological tips.',
+    )
     .setVersion('1.0')
     .addBearerAuth()
     .build();

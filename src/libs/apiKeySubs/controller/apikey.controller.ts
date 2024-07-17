@@ -6,7 +6,15 @@ import {
   Query,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBadRequestResponse, ApiInternalServerErrorResponse, ApiBody, ApiQuery } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBadRequestResponse,
+  ApiInternalServerErrorResponse,
+  ApiBody,
+  ApiQuery,
+} from '@nestjs/swagger';
 import { ApiKeySubscriptionService } from '../service/apiKeySubs.service';
 import { CreateApiKeySubscriptionDto } from '../dtos/create-apy-key-subs.dto';
 
@@ -20,7 +28,10 @@ export class ApiKeySubscriptionController {
   @Post('new')
   @ApiOperation({ summary: 'Create a new API key subscription' })
   @ApiBody({ type: CreateApiKeySubscriptionDto })
-  @ApiResponse({ status: 201, description: 'The API key subscription has been successfully created.' })
+  @ApiResponse({
+    status: 201,
+    description: 'The API key subscription has been successfully created.',
+  })
   @ApiBadRequestResponse({ description: 'Invalid data provided.' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error.' })
   async create(
@@ -50,7 +61,10 @@ export class ApiKeySubscriptionController {
 
   @Post('cancel')
   @ApiOperation({ summary: 'Cancel an API key subscription' })
-  @ApiResponse({ status: 200, description: 'API key subscription canceled successfully.' })
+  @ApiResponse({
+    status: 200,
+    description: 'API key subscription canceled successfully.',
+  })
   @ApiBadRequestResponse({ description: 'Invalid subscription ID provided.' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error.' })
   async cancelApiKey(@Body('_id') id: string) {
