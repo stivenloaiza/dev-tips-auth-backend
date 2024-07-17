@@ -23,7 +23,7 @@ export class CreateApiKeySubscriptionDto {
   })
   @IsString()
   @IsOptional()
-  apiKey: string;
+  apiKey?: string;
 
   @ApiProperty({
     description: 'Usage count of the API key subscription',

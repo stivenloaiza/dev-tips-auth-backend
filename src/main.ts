@@ -5,14 +5,14 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT || 3004;
 
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors();
 
   const config = new DocumentBuilder()
     .setTitle('API de Microservicio')
-    .setDescription('Documentación de la API de Microservicio')
+    .setDescription('Microservices for authentication, registration and management of technological tips.')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
