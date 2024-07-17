@@ -10,7 +10,16 @@ import {
   HttpException,
   Query,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBadRequestResponse, ApiInternalServerErrorResponse, ApiParam, ApiQuery, ApiBody } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBadRequestResponse,
+  ApiInternalServerErrorResponse,
+  ApiParam,
+  ApiQuery,
+  ApiBody,
+} from '@nestjs/swagger';
 import { CreateApiKeyDto } from '../dtos/createApiKey.dto';
 import { UpdateApiKeyDto } from '../dtos/updateApiKey.dto';
 import { AuthService } from '../service/api-key.service';
@@ -24,7 +33,10 @@ export class AuthController {
   @Post('new')
   @ApiOperation({ summary: 'Create a new API key' })
   @ApiBody({ type: CreateApiKeyDto })
-  @ApiResponse({ status: 201, description: 'The API key has been successfully created.' })
+  @ApiResponse({
+    status: 201,
+    description: 'The API key has been successfully created.',
+  })
   @ApiBadRequestResponse({ description: 'Invalid data provided.' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error.' })
   async create(@Body() createApiKeyDto: CreateApiKeyDto) {
@@ -58,7 +70,12 @@ export class AuthController {
   @ApiOperation({ summary: 'Get all API keys' })
   @ApiQuery({ name: 'page', type: Number, required: false })
   @ApiQuery({ name: 'limit', type: Number, required: false })
-  @ApiResponse({ status: 200, description: 'API keys retrieved successfully.', type: ApiKey, isArray: true })
+  @ApiResponse({
+    status: 200,
+    description: 'API keys retrieved successfully.',
+    type: ApiKey,
+    isArray: true,
+  })
   @ApiBadRequestResponse({ description: 'Invalid query parameters provided.' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error.' })
   async getAll(
@@ -78,7 +95,11 @@ export class AuthController {
   @Get(':id')
   @ApiOperation({ summary: 'Get API key by ID' })
   @ApiParam({ name: 'id', type: 'string', description: 'API key ID' })
-  @ApiResponse({ status: 200, description: 'API key retrieved successfully.', type: ApiKey })
+  @ApiResponse({
+    status: 200,
+    description: 'API key retrieved successfully.',
+    type: ApiKey,
+  })
   @ApiInternalServerErrorResponse({ description: 'Internal server error.' })
   @ApiParam({ name: 'id', type: 'string', description: 'API key ID' })
   async findOne(@Param('id') id: string) {
@@ -116,7 +137,11 @@ export class AuthController {
   @Delete(':id')
   @ApiOperation({ summary: 'Revoke an API key by ID' })
   @ApiParam({ name: 'id', type: 'string', description: 'API key ID' })
-  @ApiResponse({ status: 200, description: 'API key revoked successfully.'/* , type: { message: 'API key revoked successfully' } */ })
+  @ApiResponse({
+    status: 200,
+    description:
+      'API key revoked successfully.' /* , type: { message: 'API key revoked successfully' } */,
+  })
   @ApiInternalServerErrorResponse({ description: 'Internal server error.' })
   async remove(@Param('id') id: string) {
     try {
