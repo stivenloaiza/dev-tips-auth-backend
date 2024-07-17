@@ -13,6 +13,7 @@ async function bootstrap() {
 
   const port = process.env.PORT || 3000;
 
+  app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors();
 
