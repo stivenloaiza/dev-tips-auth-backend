@@ -12,9 +12,9 @@ import {
 import { UserLogService } from '../services/userLogs.service';
 import { CreateUserLogsDto } from '../dtos/createUserLogs.dto';
 import { UserLogs } from '../entities/userLogs.entities';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UpdateUserDto } from '../dtos/updateUserLogs.dto';
-
+@ApiTags('User logs')
 @Controller('userLogs')
 export class UserLogsController {
   constructor(private readonly userLogsService: UserLogService) {}
@@ -52,7 +52,7 @@ export class UserLogsController {
     description: 'The Users Logs have been successfully retrieved.',
     type: [UserLogs],
   })
-  async findAll() {
+  async findAll(): Promise<UserLogs[]> {
     return this.userLogsService.findAll();
   }
 

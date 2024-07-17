@@ -6,6 +6,7 @@ import { UnauthorizedExceptionFilter } from './libs/middleware/http-exception.fi
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const port = process.env.PORT || 3004;
 
   // Aplica el filtro de excepciones globalmente
   app.useGlobalFilters(new UnauthorizedExceptionFilter());
@@ -17,7 +18,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('API de Microservicio')
-    .setDescription('Documentación de la API de Microservicio')
+    .setDescription('Microservices for authentication, registration and management of technological tips.')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
