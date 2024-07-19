@@ -11,7 +11,6 @@ async function bootstrap() {
   // Aplica el filtro de excepciones globalmente
   app.useGlobalFilters(new UnauthorizedExceptionFilter());
 
-  app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors();
 

@@ -88,13 +88,10 @@ export class ApiKeySubscriptionService {
     }
   }
 
-  async getApiKeys(
-    limit: number,
-    typeSubscription: string,
-  ): Promise<ApiKeySubscription[]> {
+  async getApiKeys(limit: number, type: string): Promise<ApiKeySubscription[]> {
     try {
       return await this.apiKeySubscriptionModel
-        .find({ typeSubscription, isActive: true })
+        .find({ type, isActive: true })
         .limit(limit)
         .exec();
     } catch (error) {
