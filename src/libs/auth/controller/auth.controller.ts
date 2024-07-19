@@ -56,10 +56,6 @@ export class AuthController {
   }
 
   @Post('validate')
-  @ApiHeader({
-    name: 'x-api-key',
-    description: 'API key needed to access this endpoint',
-  })
   @ApiOperation({ summary: 'Validate an API key' })
   @ApiResponse({ status: 200, description: 'Validation successful.' })
   @ApiBadRequestResponse({ description: 'Invalid API key provided.' })
