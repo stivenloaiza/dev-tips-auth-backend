@@ -12,7 +12,7 @@ import {
 import { UserLogService } from '../services/userLogs.service';
 import { CreateUserLogsDto } from '../dtos/createUserLogs.dto';
 import { UserLogs } from '../entities/userLogs.entities';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UpdateUserDto } from '../dtos/updateUserLogs.dto';
 @ApiTags('User logs')
 @Controller('userLogs')
@@ -20,6 +20,10 @@ export class UserLogsController {
   constructor(private readonly userLogsService: UserLogService) {}
 
   @Post('create')
+  @ApiHeader({
+    name: 'x-api-key',
+    description: 'API key needed to access this endpoint',
+  })
   @ApiOperation({ summary: 'Create a new User Log' })
   @ApiResponse({
     status: 201,
@@ -46,6 +50,10 @@ export class UserLogsController {
   }
 
   @Get('all')
+  @ApiHeader({
+    name: 'x-api-key',
+    description: 'API key needed to access this endpoint',
+  })
   @ApiOperation({ summary: 'Retrieve all Users Logs' })
   @ApiResponse({
     status: 200,
@@ -57,6 +65,10 @@ export class UserLogsController {
   }
 
   @Get(':id')
+  @ApiHeader({
+    name: 'x-api-key',
+    description: 'API key needed to access this endpoint',
+  })
   @ApiOperation({ summary: 'Retrieve a specific User Log' })
   @ApiResponse({
     status: 200,
@@ -69,6 +81,10 @@ export class UserLogsController {
   }
 
   @Patch(':id')
+  @ApiHeader({
+    name: 'x-api-key',
+    description: 'API key needed to access this endpoint',
+  })
   @ApiOperation({ summary: 'Update a specific User Log' })
   @ApiResponse({
     status: 200,
@@ -84,6 +100,10 @@ export class UserLogsController {
   }
 
   @Delete(':id')
+  @ApiHeader({
+    name: 'x-api-key',
+    description: 'API key needed to access this endpoint',
+  })
   @ApiOperation({ summary: 'Delete a specific User Log' })
   @ApiResponse({
     status: 200,
@@ -95,6 +115,10 @@ export class UserLogsController {
   }
 
   @Patch(':id/block')
+  @ApiHeader({
+    name: 'x-api-key',
+    description: 'API key needed to access this endpoint',
+  })
   @ApiOperation({ summary: 'Block a specific User Log' })
   @ApiResponse({
     status: 200,

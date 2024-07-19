@@ -19,6 +19,7 @@ import {
   ApiParam,
   ApiQuery,
   ApiBody,
+  ApiHeader,
 } from '@nestjs/swagger';
 import { CreateApiKeyDto } from '../dtos/createApiKey.dto';
 import { UpdateApiKeyDto } from '../dtos/updateApiKey.dto';
@@ -31,6 +32,10 @@ export class AuthController {
   constructor(private readonly apiKeyService: AuthService) {}
 
   @Post('new')
+  @ApiHeader({
+    name: 'x-api-key',
+    description: 'API key needed to access this endpoint',
+  })
   @ApiOperation({ summary: 'Create a new API key' })
   @ApiBody({ type: CreateApiKeyDto })
   @ApiResponse({
@@ -51,6 +56,10 @@ export class AuthController {
   }
 
   @Post('validate')
+  @ApiHeader({
+    name: 'x-api-key',
+    description: 'API key needed to access this endpoint',
+  })
   @ApiOperation({ summary: 'Validate an API key' })
   @ApiResponse({ status: 200, description: 'Validation successful.' })
   @ApiBadRequestResponse({ description: 'Invalid API key provided.' })
@@ -67,6 +76,10 @@ export class AuthController {
   }
 
   @Get('all')
+  @ApiHeader({
+    name: 'x-api-key',
+    description: 'API key needed to access this endpoint',
+  })
   @ApiOperation({ summary: 'Get all API keys' })
   @ApiQuery({ name: 'page', type: Number, required: false })
   @ApiQuery({ name: 'limit', type: Number, required: false })
@@ -93,6 +106,10 @@ export class AuthController {
   }
 
   @Get(':id')
+  @ApiHeader({
+    name: 'x-api-key',
+    description: 'API key needed to access this endpoint',
+  })
   @ApiOperation({ summary: 'Get API key by ID' })
   @ApiParam({ name: 'id', type: 'string', description: 'API key ID' })
   @ApiResponse({
@@ -114,6 +131,10 @@ export class AuthController {
   }
 
   @Patch(':id')
+  @ApiHeader({
+    name: 'x-api-key',
+    description: 'API key needed to access this endpoint',
+  })
   @ApiOperation({ summary: 'Update an API key by ID' })
   @ApiParam({ name: 'id', type: 'string', description: 'API key ID' })
   @ApiBody({ type: UpdateApiKeyDto })
@@ -135,6 +156,10 @@ export class AuthController {
   }
 
   @Delete(':id')
+  @ApiHeader({
+    name: 'x-api-key',
+    description: 'API key needed to access this endpoint',
+  })
   @ApiOperation({ summary: 'Revoke an API key by ID' })
   @ApiParam({ name: 'id', type: 'string', description: 'API key ID' })
   @ApiResponse({

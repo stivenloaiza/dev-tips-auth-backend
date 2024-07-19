@@ -14,6 +14,7 @@ import {
   ApiInternalServerErrorResponse,
   ApiBody,
   ApiQuery,
+  ApiHeader,
 } from '@nestjs/swagger';
 import { ApiKeySubscriptionService } from '../service/apiKeySubs.service';
 import { CreateApiKeySubscriptionDto } from '../dtos/create-apy-key-subs.dto';
@@ -26,6 +27,10 @@ export class ApiKeySubscriptionController {
   ) {}
 
   @Post('new')
+  @ApiHeader({
+    name: 'x-api-key',
+    description: 'API key needed to access this endpoint',
+  })
   @ApiOperation({ summary: 'Create a new API key subscription' })
   @ApiBody({ type: CreateApiKeySubscriptionDto })
   @ApiResponse({
@@ -47,6 +52,10 @@ export class ApiKeySubscriptionController {
   }
 
   @Post('validate')
+  @ApiHeader({
+    name: 'x-api-key',
+    description: 'API key needed to access this endpoint',
+  })
   @ApiOperation({ summary: 'Validate an API key' })
   @ApiResponse({ status: 200, description: 'Validation successful.' })
   @ApiBadRequestResponse({ description: 'Invalid API key provided.' })
@@ -60,6 +69,10 @@ export class ApiKeySubscriptionController {
   }
 
   @Post('cancel')
+  @ApiHeader({
+    name: 'x-api-key',
+    description: 'API key needed to access this endpoint',
+  })
   @ApiOperation({ summary: 'Cancel an API key subscription' })
   @ApiResponse({
     status: 200,
@@ -76,16 +89,17 @@ export class ApiKeySubscriptionController {
   }
 
   @Get('keys')
+  @ApiHeader({
+    name: 'x-api-key',
+    description: 'API key needed to access this endpoint',
+  })
   @ApiOperation({ summary: 'Get API keys by type and limit' })
   @ApiQuery({ name: 'limit', type: Number, required: true })
   @ApiQuery({ name: 'typeSubscription', type: String, required: true })
   @ApiResponse({ status: 200, description: 'API keys retrieved successfully.' })
   @ApiBadRequestResponse({ description: 'Invalid query parameters provided.' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error.' })
-  async getApiKeys(
-    @Query('limit') limit: number,
-    @Query('typeSubscription') type: string,
-  ) {
+  async getApiKeys(@Query('limit') limit: number, @Query('type') type: string) {
     try {
       return await this.apiKeySubscriptionService.getApiKeys(limit, type);
     } catch (error) {

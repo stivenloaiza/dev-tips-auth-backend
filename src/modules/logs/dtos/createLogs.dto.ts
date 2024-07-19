@@ -29,9 +29,11 @@ export class CreateLogDto {
   responseBody: any;
 
   @IsNumber()
+  @IsOptional()
   statusCode: number;
 
   @IsDate()
+  @IsOptional()
   timestamp: Date;
 
   @IsOptional()
