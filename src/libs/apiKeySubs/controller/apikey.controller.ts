@@ -18,6 +18,7 @@ import {
 } from '@nestjs/swagger';
 import { ApiKeySubscriptionService } from '../service/apiKeySubs.service';
 import { CreateApiKeySubscriptionDto } from '../dtos/create-apy-key-subs.dto';
+import { validateSubsKeyDto } from '../dtos/validateSUbkey.dto';
 
 @ApiTags('Key Subscriptions')
 @Controller('key-subscription')
@@ -56,8 +57,11 @@ export class ApiKeySubscriptionController {
     name: 'x-api-key',
     description: 'API key needed to access this endpoint',
   })
+  @ApiBody({
+    type: validateSubsKeyDto,
+  })
   @ApiOperation({ summary: 'Validate an API key' })
-  @ApiResponse({ status: 200, description: 'Validation successful.' })
+  @ApiResponse({ status: 201, description: 'Validation successful.' })
   @ApiBadRequestResponse({ description: 'Invalid API key provided.' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error.' })
   async validateApiKey(@Body('apiKey') apiKey: string) {
@@ -75,7 +79,7 @@ export class ApiKeySubscriptionController {
   })
   @ApiOperation({ summary: 'Cancel an API key subscription' })
   @ApiResponse({
-    status: 200,
+    status: 201,
     description: 'API key subscription canceled successfully.',
   })
   @ApiBadRequestResponse({ description: 'Invalid subscription ID provided.' })
