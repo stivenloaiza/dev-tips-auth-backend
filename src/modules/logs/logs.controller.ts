@@ -24,7 +24,7 @@ import {
 export class LogsController {
   constructor(private readonly logsService: LogsService) {}
 
-  @Post()
+  @Post('new')
   @ApiHeader({
     name: 'x-api-key',
     description: 'API key needed to access this endpoint',
@@ -36,7 +36,7 @@ export class LogsController {
     return this.logsService.create(createLogDto);
   }
 
-  @Get()
+  @Get('all')
   @ApiHeader({
     name: 'x-api-key',
     description: 'API key needed to access this endpoint',

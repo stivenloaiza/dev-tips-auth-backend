@@ -25,6 +25,7 @@ import { CreateApiKeyDto } from '../dtos/createApiKey.dto';
 import { UpdateApiKeyDto } from '../dtos/updateApiKey.dto';
 import { AuthService } from '../service/api-key.service';
 import { ApiKey } from '../entities/api-key.entity';
+import { validateKeyDto } from '../dtos/validate.dto';
 
 @ApiTags('API Keys')
 @Controller('api-keys')
@@ -60,8 +61,11 @@ export class AuthController {
     name: 'x-api-key',
     description: 'API key needed to access this endpoint',
   })
+  @ApiBody({
+    type: validateKeyDto,
+  })
   @ApiOperation({ summary: 'Validate an API key' })
-  @ApiResponse({ status: 200, description: 'Validation successful.' })
+  @ApiResponse({ status: 201, description: 'Validation successful.' })
   @ApiBadRequestResponse({ description: 'Invalid API key provided.' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error.' })
   async validateApiKey(@Body('key') key: string) {

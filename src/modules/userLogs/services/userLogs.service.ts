@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -49,12 +50,24 @@ export class UserLogService {
     }
   }
 
-  async findAll(): Promise<UserLogs[]> {
+  async findAll(
+    page: number,
+    limit: number,
+  ): Promise<{ data: UserLogs[]; total: number }> {
     try {
-      const logs = await this.userLogsModel.find().exec();
-      return logs.map((log) => log.toObject({ versionKey: false }));
+      const logs = await this.userLogsModel
+        .find()
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .exec();
+      const total = await this.userLogsModel.countDocuments().exec();
+
+      return {
+        data: logs.map((log) => log.toObject({ versionKey: false })),
+        total,
+      };
     } catch (error) {
-      throw new InternalServerErrorException(error.message);
+      throw new BadRequestException('Error retrieving logs');
     }
   }
 

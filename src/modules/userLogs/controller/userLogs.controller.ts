@@ -8,11 +8,18 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { UserLogService } from '../services/userLogs.service';
 import { CreateUserLogsDto } from '../dtos/createUserLogs.dto';
 import { UserLogs } from '../entities/userLogs.entities';
-import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiHeader,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UpdateUserDto } from '../dtos/updateUserLogs.dto';
 @ApiTags('User logs')
 @Controller('userLogs')
@@ -54,14 +61,26 @@ export class UserLogsController {
     name: 'x-api-key',
     description: 'API key needed to access this endpoint',
   })
-  @ApiOperation({ summary: 'Retrieve all Users Logs' })
-  @ApiResponse({
-    status: 200,
-    description: 'The Users Logs have been successfully retrieved.',
-    type: [UserLogs],
+  @ApiOperation({ summary: 'Retrieve all logs with pagination' })
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    description: 'Page number',
+    example: 1,
   })
-  async findAll(): Promise<UserLogs[]> {
-    return this.userLogsService.findAll();
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    description: 'Number of items per page',
+    example: 10,
+  })
+  @ApiResponse({ status: 200, description: 'Logs retrieved successfully.' })
+  @ApiResponse({ status: 400, description: 'Error retrieving logs.' })
+  findAll(
+    @Query('page') page = 1,
+    @Query('limit') limit = 10,
+  ): Promise<{ data: UserLogs[]; total: number }> {
+    return this.userLogsService.findAll(page, limit);
   }
 
   @Get(':id')
