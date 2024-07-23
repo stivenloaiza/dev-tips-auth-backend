@@ -6,6 +6,7 @@ import {
   IsOptional,
   IsNumber,
   IsArray,
+  IsNotEmpty,
 } from 'class-validator';
 
 export class CreateApiKeyDto {
@@ -15,6 +16,10 @@ export class CreateApiKeyDto {
   })
   @IsString()
   system_name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  key: string;
 
   @ApiProperty({
     description: 'Expiration date of the API key',

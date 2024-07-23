@@ -6,7 +6,6 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './libs/auth/guard/api-key.guard';
 import { ApiKeyModule } from './libs/auth/api-key.module';
 import { ApiKeySubscriptionModule } from './libs/apiKeySubs/apikeyUser.module';
-import { UserLogsModule } from './modules/userLogs/userLogs.module';
 import { LogsModule } from './modules/logs/logs.module';
 
 @Module({
@@ -18,15 +17,14 @@ import { LogsModule } from './modules/logs/logs.module';
     }),
     ApiKeyModule,
     ApiKeySubscriptionModule,
-    UserLogsModule,
     LogsModule,
     PersistenceModule,
   ],
-  providers: [
+   providers: [
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
-  ],
+  ], 
 })
 export class AppModule {}

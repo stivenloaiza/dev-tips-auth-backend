@@ -37,7 +37,7 @@ export class ApiKeySubscriptionService {
     try {
       const { type, limit } = createApiKeySubscriptionDto;
       const apiKey = await this.generateApiKey(type);
-      const newApiKeySubscription = await new this.apiKeySubscriptionModel({
+      const newApiKeySubscription = new this.apiKeySubscriptionModel({
         type,
         apiKey,
         limit,
@@ -47,7 +47,7 @@ export class ApiKeySubscriptionService {
       // Validar la API key después de su creación
       await this.validateApiKey(apiKey);
 
-      return await savedApiKey;
+      return savedApiKey;
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }

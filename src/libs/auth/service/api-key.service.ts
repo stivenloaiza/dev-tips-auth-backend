@@ -44,7 +44,7 @@ export class AuthService {
       if (!apiKey) {
         throw new NotFoundException('API Key not found');
       }
-      return await apiKey;
+      return apiKey;
     } catch (error) {
       this.logger.error(`Error getting API key with id: ${id}`, error.stack);
       throw new InternalServerErrorException('Error getting API key');
@@ -62,7 +62,7 @@ export class AuthService {
       if (!updatedApiKey) {
         throw new NotFoundException('API Key not found');
       }
-      return await updatedApiKey;
+      return updatedApiKey;
     } catch (error) {
       this.logger.error(`Error updating API key with id: ${id}`, error.stack);
       throw new InternalServerErrorException('Error updating API key');
@@ -93,7 +93,7 @@ export class AuthService {
       if (!apiKeys.length) {
         throw new NotFoundException('No API keys found');
       }
-      return await apiKeys;
+      return apiKeys;
     } catch (error) {
       this.logger.error('Error retrieving API keys', error.stack);
       throw new InternalServerErrorException('Error retrieving API keys');
@@ -110,15 +110,13 @@ export class AuthService {
             apiKey.maxUsage !== null &&
             apiKey.usageCount >= apiKey.maxUsage
           ) {
-            apiKey.isActive = false;
-            await apiKey.save();
+            await this.deactivateApiKey(apiKey);
             this.logger.warn(`API key usage limit reached: ${key}`);
             throw new ForbiddenException('API key usage limit reached');
           }
-          apiKey.usageCount++;
-          await apiKey.save();
-          this.logger.log(`API key matched and validated`);
+          await this.incrementUsageCount(apiKey);
           await this.updateLastUsed(apiKey.id);
+          this.logger.log(`API key matched and validated`);
           return true;
         }
       }
@@ -127,6 +125,16 @@ export class AuthService {
       this.logger.error('Error validating API key', error.stack);
       throw new InternalServerErrorException('Error validating API key');
     }
+  }
+
+  private async incrementUsageCount(apiKey: ApiKeyDocument): Promise<void> {
+    apiKey.usageCount++;
+    await apiKey.save();
+  }
+
+  private async deactivateApiKey(apiKey: ApiKeyDocument): Promise<void> {
+    apiKey.isActive = false;
+    await apiKey.save();
   }
 
   private async updateLastUsed(apiKeyId: string): Promise<void> {

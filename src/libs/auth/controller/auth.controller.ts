@@ -122,7 +122,6 @@ export class AuthController {
     type: ApiKey,
   })
   @ApiInternalServerErrorResponse({ description: 'Internal server error.' })
-  @ApiParam({ name: 'id', type: 'string', description: 'API key ID' })
   async findOne(@Param('id') id: string) {
     try {
       return await this.apiKeyService.getApiKey(id);
@@ -169,7 +168,7 @@ export class AuthController {
   @ApiResponse({
     status: 200,
     description:
-      'API key revoked successfully.' /* , type: { message: 'API key revoked successfully' } */,
+      'API key revoked successfully.',
   })
   @ApiInternalServerErrorResponse({ description: 'Internal server error.' })
   async remove(@Param('id') id: string) {

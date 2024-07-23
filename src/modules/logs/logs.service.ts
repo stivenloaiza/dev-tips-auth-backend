@@ -2,6 +2,8 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
+  Logger,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -10,6 +12,7 @@ import { Log, LogDocument } from './entities/logs.entity';
 
 @Injectable()
 export class LogsService {
+  private readonly logger = new Logger(LogsService.name);
   constructor(@InjectModel(Log.name) private logModel: Model<LogDocument>) {}
 
   async create(createLogDto: CreateLogDto): Promise<Log> {
@@ -17,13 +20,14 @@ export class LogsService {
       const createdLog = new this.logModel(createLogDto);
       return await createdLog.save();
     } catch (error) {
+      this.logger.error('Error creating log', error.stack);
       throw new BadRequestException('Error creating log');
     }
   }
 
   async findAll(
-    page: number,
-    limit: number,
+    page: number = 1,
+    limit: number = 10,
   ): Promise<{ data: Log[]; total: number }> {
     try {
       const logs = await this.logModel
@@ -34,7 +38,8 @@ export class LogsService {
       const total = await this.logModel.countDocuments().exec();
       return { data: logs, total };
     } catch (error) {
-      throw new BadRequestException('Error retrieving logs');
+      this.logger.error('Error retrieving logs', error.stack);
+      throw new InternalServerErrorException('Error retrieving logs');
     }
   }
 
@@ -46,7 +51,8 @@ export class LogsService {
       }
       return log;
     } catch (error) {
-      throw new NotFoundException(`Log #${id} not found`);
+      this.logger.error(`Error finding log with id: ${id}`, error.stack);
+      throw new InternalServerErrorException('Error finding log');
     }
   }
 
@@ -60,7 +66,8 @@ export class LogsService {
       }
       return existingLog;
     } catch (error) {
-      throw new BadRequestException('Error updating log');
+      this.logger.error(`Error updating log with id: ${id}`, error.stack);
+      throw new InternalServerErrorException('Error updating log');
     }
   }
 
@@ -71,7 +78,8 @@ export class LogsService {
         throw new NotFoundException(`Log #${id} not found`);
       }
     } catch (error) {
-      throw new BadRequestException('Error deleting log');
+      this.logger.error(`Error deleting log with id: ${id}`, error.stack);
+      throw new InternalServerErrorException('Error deleting log');
     }
   }
 }

@@ -99,7 +99,6 @@ export class ApiKeySubscriptionController {
   })
   @ApiOperation({ summary: 'Get API keys by type and limit' })
   @ApiQuery({ name: 'limit', type: Number, required: true })
-  @ApiQuery({ name: 'typeSubscription', type: String, required: true })
   @ApiResponse({ status: 200, description: 'API keys retrieved successfully.' })
   @ApiBadRequestResponse({ description: 'Invalid query parameters provided.' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error.' })
