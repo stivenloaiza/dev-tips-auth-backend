@@ -4,14 +4,19 @@ on:
   push:
     branches:
       - main
+      - dev
+     
     
   pull_request:
     branches:
       - main
+      - dev
+    
    
 
 jobs:
   test:
+    name: test job
     runs-on: ubuntu-latest
 
     steps:
@@ -28,17 +33,12 @@ jobs:
 
       - name: Read skip-tests configuration
         id: read_config
-        run: 
+        run: |
           skip_tests=$(jq '.skipTests' skip-test.config.json)
           echo "RUN_TESTS=${skip_tests}" >> $GITHUB_ENV
 
-      - name: Run tests
-        run: npm run test
-
       - name: Debug RUN_TESTS
         run: echo "RUN_TESTS is set to $RUN_TESTS"
-        env:
-          RUN_TESTS: ${{ env.RUN_TESTS }}
 
       - name: Run unit tests
         if: env.RUN_TESTS == 'true'
