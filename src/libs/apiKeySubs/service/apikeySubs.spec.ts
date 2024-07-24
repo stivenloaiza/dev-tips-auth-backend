@@ -5,6 +5,10 @@ import { ApiKeySubscription } from '../entities/apiKeySubs.entity';
 import { CreateApiKeySubscriptionDto } from '../dtos/create-apy-key-subs.dto';
 import { InternalServerErrorException, Logger } from '@nestjs/common';
 
+export const apiKeySubscriptionModelMock = {
+    findByIdAndUpdate: jest.fn(),
+  };
+
 export const mockCreateApiKeySubscriptionDto: CreateApiKeySubscriptionDto = {
     type: 'premium',
     apiKey: 'mockApiKey123',
@@ -18,7 +22,7 @@ export const mockCreateApiKeySubscriptionDto: CreateApiKeySubscriptionDto = {
     deletedAt: null,
     deleteBy: null,
   };
-  
+
 describe('ApiKeySubscriptionService', () => {
   let service: ApiKeySubscriptionService;
   let apiKeySubscriptionModel: any;
@@ -196,6 +200,45 @@ describe('getApiKeys', () => {
         exec: jest.fn().mockRejectedValue(new Error('Test error')),
       });
       await expect(service.getApiKeys(10, 'premium')).rejects.toThrow(InternalServerErrorException);
+    });
+  });
+  describe('ApiKeySubscriptionService', () => {
+    let service: ApiKeySubscriptionService;
+    let apiKeySubscriptionModel: typeof apiKeySubscriptionModelMock;
+  
+    beforeEach(async () => {
+      apiKeySubscriptionModel = apiKeySubscriptionModelMock;
+  
+      const module: TestingModule = await Test.createTestingModule({
+        providers: [
+          ApiKeySubscriptionService,
+          {
+            provide: getModelToken(ApiKeySubscription.name),
+            useValue: apiKeySubscriptionModel,
+          },
+        ],
+      }).compile();
+  
+      service = module.get<ApiKeySubscriptionService>(ApiKeySubscriptionService);
+    });
+  
+    describe('cancelApiKey', () => {
+      it('should cancel the API key by setting isActive to false', async () => {
+        apiKeySubscriptionModel.findByIdAndUpdate.mockReturnValue({
+          exec: jest.fn().mockResolvedValue(true),
+        });
+  
+        await service.cancelApiKey('someId');
+        expect(apiKeySubscriptionModel.findByIdAndUpdate).toHaveBeenCalledWith('someId', { isActive: false });
+      });
+  
+      it('should throw an InternalServerErrorException if an error occurs', async () => {
+        apiKeySubscriptionModel.findByIdAndUpdate.mockReturnValue({
+          exec: jest.fn().mockRejectedValue(new Error('Test error')),
+        });
+  
+        await expect(service.cancelApiKey('someId')).rejects.toThrow(InternalServerErrorException);
+      });
     });
   });
 });
