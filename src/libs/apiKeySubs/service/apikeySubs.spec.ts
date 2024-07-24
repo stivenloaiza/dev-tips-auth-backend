@@ -1,4 +1,4 @@
-import { ApiKeySubscriptionService } from './apikeySubs.service';
+import { ApiKeySubscriptionService } from './apiKeySubs.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getModelToken } from '@nestjs/mongoose';
 import { ApiKeySubscription } from '../entities/apiKeySubs.entity';
