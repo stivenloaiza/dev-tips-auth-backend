@@ -110,4 +110,26 @@ describe('LogsService', () => {
       });
       await expect(service.findAll()).rejects.toThrow(InternalServerErrorException);
     });
-  });  
+  });
+  
+  describe('findOne', () => {
+    it('should find a log by id', async () => {
+      model.findById().exec = jest.fn().mockResolvedValueOnce(mockLog('1'));
+      const result = await service.findOne('1');
+      expect(result).toEqual(mockLog('1'));
+      expect(model.findById).toHaveBeenCalledWith('1');
+    });
+
+    it('should throw NotFoundException if log not found', async () => {
+      model.findById().exec = jest.fn().mockResolvedValueOnce(null);
+      await expect(service.findOne('1')).rejects.toThrow(NotFoundException);
+    });
+
+    it('should throw an error if log retrieval fails', async () => {
+      model.findById().exec = jest.fn().mockImplementationOnce(() => {
+        throw new Error('Error');
+      });
+      await expect(service.findOne('1')).rejects.toThrow(InternalServerErrorException);
+    });
+  });
+  
