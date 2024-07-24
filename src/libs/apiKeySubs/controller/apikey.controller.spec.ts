@@ -89,6 +89,27 @@ describe('ApiKeySubscriptionController', () => {
       await expect(controller.validateApiKey(apiKey )).rejects.toThrow(InternalServerErrorException);
     });
   });
+
+  describe('cancelApiKey', () => {
+    it('should cancel the API key subscription and return the result', async () => {
+      const id = 'validSubscriptionId';
+      const cancelResult = { message: 'API key subscription canceled successfully.' };
+      service.cancelApiKey = jest.fn().mockResolvedValue(cancelResult);
+
+      const result = await controller.cancelApiKey(id);
+
+      expect(result).toEqual(cancelResult);
+      expect(service.cancelApiKey).toHaveBeenCalledWith(id);
+    });
+
+    it('should throw an InternalServerErrorException if an error occurs', async () => {
+      const id = 'invalidSubscriptionId';
+      service.cancelApiKey = jest.fn().mockRejectedValue(new Error('Test error'));
+
+      await expect(controller.cancelApiKey(id)).rejects.toThrow(InternalServerErrorException);
+    });
+  });
 });
+
 
 
