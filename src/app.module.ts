@@ -8,7 +8,6 @@ import { ApiKeyModule } from './libs/auth/api-key.module';
 import { ApiKeySubscriptionModule } from './libs/apiKeySubs/apikeyUser.module';
 import { LogsModule } from './modules/logs/logs.module';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -21,11 +20,11 @@ import { LogsModule } from './modules/logs/logs.module';
     LogsModule,
     PersistenceModule,
   ],
-   providers: [
+  providers: [
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
-  ], 
+  ],
 })
 export class AppModule {}

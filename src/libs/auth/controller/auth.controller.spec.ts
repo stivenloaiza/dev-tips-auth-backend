@@ -1,10 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from '../service/api-key.service';
-import { HttpException, HttpStatus } from '@nestjs/common';
 import { CreateApiKeyDto } from '../dtos/createApiKey.dto';
 import { UpdateApiKeyDto } from '../dtos/updateApiKey.dto';
-import { validateKeyDto } from '../dtos/validate.dto';
 import { ApiKey } from '../entities/api-key.entity';
 
 const mockApiKeyService = {
@@ -18,7 +16,6 @@ const mockApiKeyService = {
 
 describe('AuthController', () => {
   let authController: AuthController;
-  let apiKeyService: AuthService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -32,12 +29,14 @@ describe('AuthController', () => {
     }).compile();
 
     authController = module.get<AuthController>(AuthController);
-    apiKeyService = module.get<AuthService>(AuthService);
   });
 
   describe('create', () => {
     it('should create a new API key', async () => {
-      const createApiKeyDto: CreateApiKeyDto = { system_name: "auth", key: "123" };
+      const createApiKeyDto: CreateApiKeyDto = {
+        system_name: 'auth',
+        key: '123',
+      };
       const result = { id: '1', ...createApiKeyDto };
 
       mockApiKeyService.createApiKey.mockResolvedValue(result);
@@ -46,11 +45,16 @@ describe('AuthController', () => {
     });
 
     it('should throw an exception when API key creation fails', async () => {
-      const createApiKeyDto: CreateApiKeyDto = { system_name: "auth", key: "123" };
+      const createApiKeyDto: CreateApiKeyDto = {
+        system_name: 'auth',
+        key: '123',
+      };
 
       mockApiKeyService.createApiKey.mockRejectedValue(new Error('Error'));
 
-      await expect(authController.create(createApiKeyDto)).rejects.toThrowError('Error');
+      await expect(authController.create(createApiKeyDto)).rejects.toThrowError(
+        'Error',
+      );
     });
   });
 
@@ -67,9 +71,13 @@ describe('AuthController', () => {
     it('should throw an exception when API key validation fails', async () => {
       const key = 'test-key';
 
-      mockApiKeyService.validateApiKey.mockRejectedValue(new Error('Invalid key'));
+      mockApiKeyService.validateApiKey.mockRejectedValue(
+        new Error('Invalid key'),
+      );
 
-      await expect(authController.validateApiKey(key)).rejects.toThrowError('Invalid key');
+      await expect(authController.validateApiKey(key)).rejects.toThrowError(
+        'Invalid key',
+      );
     });
   });
 
@@ -77,26 +85,26 @@ describe('AuthController', () => {
     it('should return all API keys', async () => {
       const page = 1;
       const limit = 10;
-     const result: ApiKey[] = [
-  {
-    system_name: 'auth',
-    key: 'test-key',
-    description: 'askdhask',
-    lastUsedAt: null,
-    maxUsage: 100000,
-    usageCount: 0,
-    allowedIps: [],
-    permissions: ['read'],
-    expiration: new Date(),
-    isActive: true,
-    createdAt: new Date(),
-    createBy: 'creator-id',
-    updatedAt: new Date(),
-    updateBy: 'updater-id',
-    deletedAt: null,
-    deleteBy: 'deleter-id'
-  }
-];
+      const result: ApiKey[] = [
+        {
+          system_name: 'auth',
+          key: 'test-key',
+          description: 'askdhask',
+          lastUsedAt: null,
+          maxUsage: 100000,
+          usageCount: 0,
+          allowedIps: [],
+          permissions: ['read'],
+          expiration: new Date(),
+          isActive: true,
+          createdAt: new Date(),
+          createBy: 'creator-id',
+          updatedAt: new Date(),
+          updateBy: 'updater-id',
+          deletedAt: null,
+          deleteBy: 'deleter-id',
+        },
+      ];
 
       mockApiKeyService.findAll.mockResolvedValue(result);
 
@@ -109,7 +117,9 @@ describe('AuthController', () => {
 
       mockApiKeyService.findAll.mockRejectedValue(new Error('Error'));
 
-      await expect(authController.getAll(page, limit)).rejects.toThrowError('Error');
+      await expect(authController.getAll(page, limit)).rejects.toThrowError(
+        'Error',
+      );
     });
   });
 
@@ -117,26 +127,25 @@ describe('AuthController', () => {
     it('should return an API key by ID', async () => {
       const id = '1';
       const result: ApiKey[] = [
-  {
-    system_name: 'auth',
-    key: 'test-key',
-    description: 'askdhask',
-    lastUsedAt: null,
-    maxUsage: 100000,
-    usageCount: 0,
-    allowedIps: [],
-    permissions: ['read'],
-    expiration: new Date(),
-    isActive: true,
-    createdAt: new Date(),
-    createBy: 'creator-id',
-    updatedAt: new Date(),
-    updateBy: 'updater-id',
-    deletedAt: null,
-    deleteBy: 'deleter-id'
-  }
-];
-
+        {
+          system_name: 'auth',
+          key: 'test-key',
+          description: 'askdhask',
+          lastUsedAt: null,
+          maxUsage: 100000,
+          usageCount: 0,
+          allowedIps: [],
+          permissions: ['read'],
+          expiration: new Date(),
+          isActive: true,
+          createdAt: new Date(),
+          createBy: 'creator-id',
+          updatedAt: new Date(),
+          updateBy: 'updater-id',
+          deletedAt: null,
+          deleteBy: 'deleter-id',
+        },
+      ];
 
       mockApiKeyService.getApiKey.mockResolvedValue(result);
 
@@ -148,14 +157,18 @@ describe('AuthController', () => {
 
       mockApiKeyService.getApiKey.mockRejectedValue(new Error('Not Found'));
 
-      await expect(authController.findOne(id)).rejects.toThrowError('Not Found');
+      await expect(authController.findOne(id)).rejects.toThrowError(
+        'Not Found',
+      );
     });
   });
 
   describe('update', () => {
     it('should update an API key by ID', async () => {
       const id = '1';
-      const updateApiKeyDto: UpdateApiKeyDto = { /* data */ };
+      const updateApiKeyDto: UpdateApiKeyDto = {
+        /* data */
+      };
       const result = { id, ...updateApiKeyDto };
 
       mockApiKeyService.updateApiKey.mockResolvedValue(result);
@@ -165,11 +178,15 @@ describe('AuthController', () => {
 
     it('should throw an exception when updating API key fails', async () => {
       const id = '1';
-      const updateApiKeyDto: UpdateApiKeyDto = { /* data */ };
+      const updateApiKeyDto: UpdateApiKeyDto = {
+        /* data */
+      };
 
       mockApiKeyService.updateApiKey.mockRejectedValue(new Error('Error'));
 
-      await expect(authController.update(id, updateApiKeyDto)).rejects.toThrowError('Error');
+      await expect(
+        authController.update(id, updateApiKeyDto),
+      ).rejects.toThrowError('Error');
     });
   });
 
@@ -179,7 +196,9 @@ describe('AuthController', () => {
 
       mockApiKeyService.revokeApiKey.mockResolvedValue(undefined);
 
-      expect(await authController.remove(id)).toEqual({ message: 'API key revoked successfully' });
+      expect(await authController.remove(id)).toEqual({
+        message: 'API key revoked successfully',
+      });
     });
 
     it('should throw an exception when revoking API key fails', async () => {
