@@ -5,6 +5,20 @@ import { ApiKeySubscription } from '../entities/apiKeySubs.entity';
 import { CreateApiKeySubscriptionDto } from '../dtos/create-apy-key-subs.dto';
 import { InternalServerErrorException, Logger } from '@nestjs/common';
 
+export const mockCreateApiKeySubscriptionDto: CreateApiKeySubscriptionDto = {
+    type: 'premium',
+    apiKey: 'mockApiKey123',
+    usageCount: 5,
+    limit: 50,
+    isActive: true,
+    createdAt: new Date(),
+    createBy: 'testUser',
+    updatedAt: new Date(),
+    updateBy: 'testUser2',
+    deletedAt: null,
+    deleteBy: null,
+  };
+  
 describe('ApiKeySubscriptionService', () => {
   let service: ApiKeySubscriptionService;
   let apiKeySubscriptionModel: any;
@@ -161,4 +175,27 @@ describe('ApiKeySubscriptionService', () => {
       await expect(service.validateApiKey('validApiKey')).rejects.toThrow(InternalServerErrorException);
     });
 });
+
+describe('getApiKeys', () => {
+    it('should return a list of API key subscriptions', async () => {
+      const apiKeys = [mockCreateApiKeySubscriptionDto];
+      apiKeySubscriptionModel.find.mockReturnValue({
+        limit: jest.fn().mockReturnThis(),
+        exec: jest.fn().mockResolvedValue(apiKeys),
+      });
+  
+      const result = await service.getApiKeys(10, 'premium');
+      expect(result).toEqual(apiKeys);
+      expect(apiKeySubscriptionModel.find).toHaveBeenCalledWith({ type: 'premium', isActive: true });
+      expect(apiKeySubscriptionModel.find().limit).toHaveBeenCalledWith(10);
+    });
+  
+    it('should throw an InternalServerErrorException if an error occurs', async () => {
+      apiKeySubscriptionModel.find.mockReturnValue({
+        limit: jest.fn().mockReturnThis(),
+        exec: jest.fn().mockRejectedValue(new Error('Test error')),
+      });
+      await expect(service.getApiKeys(10, 'premium')).rejects.toThrow(InternalServerErrorException);
+    });
+  });
 });
