@@ -133,3 +133,54 @@ describe('LogsService', () => {
     });
   });
   
+  describe('update', () => {
+    it('should update a log', async () => {
+      const updateLogDto: CreateLogDto = {
+        ip: '127.0.0.1',
+        userId: 'user123',
+        endpoint: '/api/test',
+        system_name: 'TestSystem',
+        method: 'GET',
+        requestBody: {},
+        responseBody: {},
+        statusCode: 200,
+        timestamp: new Date(),
+      };
+      model.findByIdAndUpdate().exec = jest.fn().mockResolvedValueOnce(mockLog('1'));
+      const result = await service.update('1', updateLogDto);
+      expect(result).toEqual(mockLog('1'));
+      expect(model.findByIdAndUpdate).toHaveBeenCalledWith('1', updateLogDto, { new: true });
+    });
+
+    it('should throw NotFoundException if log not found', async () => {
+      model.findByIdAndUpdate().exec = jest.fn().mockResolvedValueOnce(null);
+      await expect(service.update('1', {
+        ip: '127.0.0.1',
+        userId: 'user123',
+        endpoint: '/api/test',
+        system_name: 'TestSystem',
+        method: 'GET',
+        requestBody: {},
+        responseBody: {},
+        statusCode: 200,
+        timestamp: new Date(),
+      })).rejects.toThrow(NotFoundException);
+    });
+
+    it('should throw an error if log update fails', async () => {
+      model.findByIdAndUpdate().exec = jest.fn().mockImplementationOnce(() => {
+        throw new Error('Error');
+      });
+      await expect(service.update('1', {
+        ip: '127.0.0.1',
+        userId: 'user123',
+        endpoint: '/api/test',
+        system_name: 'TestSystem',
+        method: 'GET',
+        requestBody: {},
+        responseBody: {},
+        statusCode: 200,
+        timestamp: new Date(),
+      })).rejects.toThrow(InternalServerErrorException);
+    });
+  });  
