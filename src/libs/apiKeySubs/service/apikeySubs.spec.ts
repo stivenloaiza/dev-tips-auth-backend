@@ -1,11 +1,11 @@
-
 import { ApiKeySubscriptionService } from './apikeySubs.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getModelToken } from '@nestjs/mongoose';
 import { ApiKeySubscription } from '../entities/apiKeySubs.entity';
+import { CreateApiKeySubscriptionDto } from '../dtos/create-apy-key-subs.dto';
+import { InternalServerErrorException } from '@nestjs/common';
 
-
- describe('ApiKeySubscriptionService', () => {
+describe('ApiKeySubscriptionService', () => {
   let service: ApiKeySubscriptionService;
   let apiKeySubscriptionModel: any;
 
@@ -42,5 +42,65 @@ import { ApiKeySubscription } from '../entities/apiKeySubs.entity';
       const apiKey = await service['generateApiKey']('other');
       expect(apiKey).toHaveLength(20);
     });
-  }); 
+  });
+
+  describe('create', () => {
+    it('should throw an InternalServerErrorException if generateApiKey fails', async () => {
+      const createApiKeySubscriptionDto: CreateApiKeySubscriptionDto = {
+        type: 'tvs',
+        limit: 10,
+      };
+
+      jest
+        .spyOn(service, 'generateApiKey')
+        .mockRejectedValue(new Error('test error'));
+
+      await expect(service.create(createApiKeySubscriptionDto)).rejects.toThrow(
+        InternalServerErrorException,
+      );
+    });
+
+    it('should throw an InternalServerErrorException if save fails', async () => {
+      const createApiKeySubscriptionDto: CreateApiKeySubscriptionDto = {
+        type: 'tvs',
+        limit: 10,
+      };
+
+      const generatedApiKey = 'abc123';
+
+      jest.spyOn(service, 'generateApiKey').mockResolvedValue(generatedApiKey);
+
+      apiKeySubscriptionModel.save.mockRejectedValue(new Error('save error'));
+
+      await expect(service.create(createApiKeySubscriptionDto)).rejects.toThrow(
+        InternalServerErrorException,
+      );
+    });
+
+    it('should throw an InternalServerErrorException if validateApiKey fails', async () => {
+      const createApiKeySubscriptionDto: CreateApiKeySubscriptionDto = {
+        type: 'tvs',
+        limit: 10,
+      };
+
+      const generatedApiKey = 'abc123';
+      const savedApiKeySubscription = {
+        type: 'tvs',
+        apiKey: generatedApiKey,
+        limit: 10,
+      };
+
+      jest.spyOn(service, 'generateApiKey').mockResolvedValue(generatedApiKey);
+
+      apiKeySubscriptionModel.save.mockResolvedValue(savedApiKeySubscription);
+
+      jest
+        .spyOn(service, 'validateApiKey')
+        .mockRejectedValue(new Error('validate error'));
+
+      await expect(service.create(createApiKeySubscriptionDto)).rejects.toThrow(
+        InternalServerErrorException,
+      );
+    });
+  });
 });

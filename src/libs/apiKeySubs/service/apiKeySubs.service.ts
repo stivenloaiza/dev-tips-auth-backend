@@ -20,7 +20,7 @@ export class ApiKeySubscriptionService {
     private apiKeySubscriptionModel: Model<ApiKeySubscriptionDocument>,
   ) {}
 
-  private async generateApiKey(type: string): Promise<string> {
+  async generateApiKey(type: string): Promise<string> {
     try {
       const length = type === 'tvs' ? 6 : 20;
       return await [...Array(length)]
