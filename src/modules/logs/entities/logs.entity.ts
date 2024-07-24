@@ -26,10 +26,10 @@ export class Log {
   @Prop({ type: MongooseSchema.Types.Mixed, required: true })
   responseBody: any;
 
-  @Prop({ required: true })
+  @Prop()
   statusCode: number;
 
-  @Prop({ required: true })
+  @Prop()
   timestamp: Date;
 
   @Prop({ default: null })

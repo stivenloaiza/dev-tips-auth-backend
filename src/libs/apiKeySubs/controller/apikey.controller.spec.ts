@@ -1,9 +1,12 @@
+
+import { Test, TestingModule } from '@nestjs/testing';
+
 import { ApiKeySubscriptionController } from './apikey.controller';
 import { CreateApiKeySubscriptionDto } from '../dtos/create-apy-key-subs.dto';
 import { InternalServerErrorException } from '@nestjs/common';
 import { ApiKeySubscription } from '../entities/apiKeySubs.entity';
 import { ApiKeySubscriptionService } from '../service/apiKeySubs.service';
-import { Test, TestingModule } from '@nestjs/testing';
+
 
 describe('ApiKeySubscriptionController', () => {
   let controller: ApiKeySubscriptionController;
@@ -43,9 +46,9 @@ describe('ApiKeySubscriptionController', () => {
       ],
     }).compile();
 
-    controller = module.get<ApiKeySubscriptionController>(
-      ApiKeySubscriptionController,
-    );
+
+
+    controller = module.get<ApiKeySubscriptionController>(ApiKeySubscriptionController);
     service = module.get<ApiKeySubscriptionService>(ApiKeySubscriptionService);
   });
 
@@ -59,6 +62,7 @@ describe('ApiKeySubscriptionController', () => {
       expect(service.create).toHaveBeenCalledWith(
         mockCreateApiKeySubscriptionDto,
       );
+
     });
 
     it('should throw an InternalServerErrorException if an error occurs', async () => {
@@ -147,7 +151,4 @@ describe('ApiKeySubscriptionController', () => {
     });
   });
 });
-
-
-
 

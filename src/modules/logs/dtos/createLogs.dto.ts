@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsString,
   IsNumber,
@@ -7,24 +8,31 @@ import {
 } from 'class-validator';
 
 export class CreateLogDto {
+  @ApiProperty()
   @IsString()
   ip: string;
 
+  @ApiProperty()
   @IsString()
   userId: string;
 
+  @ApiProperty()
   @IsString()
   endpoint: string;
 
+  @ApiProperty()
   @IsString()
   system_name: string;
 
+  @ApiProperty()
   @IsString()
   method: string;
 
+  @ApiProperty()
   @IsObject()
   requestBody: any;
 
+  @ApiProperty()
   @IsObject()
   responseBody: any;
 
