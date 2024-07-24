@@ -183,4 +183,26 @@ describe('LogsService', () => {
         timestamp: new Date(),
       })).rejects.toThrow(InternalServerErrorException);
     });
-  });  
+  });
+  
+  describe('remove', () => {
+    it('should delete a log by id', async () => {
+      model.findByIdAndDelete().exec = jest.fn().mockResolvedValueOnce(mockLog('1'));
+      const result = await service.remove('1');
+      expect(result).toBeUndefined();
+      expect(model.findByIdAndDelete).toHaveBeenCalledWith('1');
+    });
+
+    it('should throw NotFoundException if log not found', async () => {
+      model.findByIdAndDelete().exec = jest.fn().mockResolvedValueOnce(null);
+      await expect(service.remove('1')).rejects.toThrow(NotFoundException);
+    });
+
+    it('should throw an error if log deletion fails', async () => {
+      model.findByIdAndDelete().exec = jest.fn().mockImplementationOnce(() => {
+        throw new Error('Error');
+      });
+      await expect(service.remove('1')).rejects.toThrow(InternalServerErrorException);
+    });
+  });
+});  
