@@ -12,4 +12,8 @@ import { AuthController } from './controller/auth.controller';
   providers: [AuthService],
   exports: [AuthService],
 })
-export class ApiKeyModule {}
+export class ApiKeyModule {
+    get<T>(authController: AuthController): AuthController {
+        throw new Error("Method not implemented.");
+    }
+}
