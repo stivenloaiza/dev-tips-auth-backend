@@ -167,8 +167,7 @@ export class AuthController {
   @ApiParam({ name: 'id', type: 'string', description: 'API key ID' })
   @ApiResponse({
     status: 200,
-    description:
-      'API key revoked successfully.',
+    description: 'API key revoked successfully.',
   })
   @ApiInternalServerErrorResponse({ description: 'Internal server error.' })
   async remove(@Param('id') id: string) {

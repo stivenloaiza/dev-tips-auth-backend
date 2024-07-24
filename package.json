@@ -60,6 +60,35 @@
     "typescript": "^5.1.3"
   },
   "jest": {
+    "collectCoverage": true,
+    "coverageThreshold": {
+      "global": {
+        "functions": 30,
+        "lines": 30
+      }
+    },
+     "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/dist/",
+      "/build/",
+      "/src/modules/logs/dtos",
+      "/src/modules/logs/entities",
+      "/src/modules/logs/logs.module.ts",
+      "/src/libs/apiKeySubs/dtos",
+      "/src/libs/apiKeySubs/entities",
+      "/src/libs/apiKeySubs/apikeyUser.module.ts",
+      "/src/libs/auth/dtos",
+      "/src/libs/auth/entities",
+      "/src/libs/auth/guard",
+      "/src/libs/auth/api-key.module.ts",
+      "/src/libs/middleware",
+      "/src/libs/persistence",
+      "/src/modules/*/dto/",
+      "/src/app.module.ts",
+      "/src/main.ts",
+      ".eslintrc.js",
+      ".prettierrc"
+    ],
     "moduleFileExtensions": [
       "js",
       "json",
