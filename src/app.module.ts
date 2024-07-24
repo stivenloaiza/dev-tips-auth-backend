@@ -20,11 +20,11 @@ import { LogsModule } from './modules/logs/logs.module';
     LogsModule,
     PersistenceModule,
   ],
-  /* providers: [
+  providers: [
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
-  ], */
+  ],
 })
 export class AppModule {}
