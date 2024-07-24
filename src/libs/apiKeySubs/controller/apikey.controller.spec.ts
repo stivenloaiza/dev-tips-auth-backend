@@ -109,7 +109,45 @@ describe('ApiKeySubscriptionController', () => {
       await expect(controller.cancelApiKey(id)).rejects.toThrow(InternalServerErrorException);
     });
   });
+
+  describe('getApiKeys', () => {
+    it('should retrieve API keys by type and limit', async () => {
+      const limit = 10;
+      const type = 'premium';
+      const apiKeys: ApiKeySubscription[] = [
+        {
+          type: 'premium',
+          apiKey: 'mockApiKey123',
+          usageCount: 5,
+          limit: 50,
+          isActive: true,
+          createdAt: new Date(),
+          createBy: 'testUser',
+          updatedAt: new Date(),
+          updateBy: 'testUser2',
+          deletedAt: null,
+          deleteBy: null,
+        },
+      ];
+
+      service.getApiKeys = jest.fn().mockResolvedValue(apiKeys);
+
+      const result = await controller.getApiKeys(limit, type);
+
+      expect(result).toEqual(apiKeys);
+      expect(service.getApiKeys).toHaveBeenCalledWith(limit, type);
+    });
+
+    it('should throw an InternalServerErrorException if an error occurs', async () => {
+      const limit = 10;
+      const type = 'premium';
+      service.getApiKeys = jest.fn().mockRejectedValue(new Error('Test error'));
+
+      await expect(controller.getApiKeys(limit, type)).rejects.toThrow(InternalServerErrorException);
+    });
+  });
 });
+
 
 
 
