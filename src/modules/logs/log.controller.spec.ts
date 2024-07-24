@@ -2,8 +2,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { LogsController } from './logs.controller';
 import { LogsService } from './logs.service';
 import { CreateLogDto } from './dtos/createLogs.dto';
-import { Log } from './entities/logs.entity';
-import { NotFoundException, BadRequestException, InternalServerErrorException } from '@nestjs/common';
+
+import {
+  NotFoundException,
+  BadRequestException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 
 const mockLog = {
   ip: '127.0.0.1',
@@ -59,9 +63,13 @@ describe('LogsController', () => {
     it('should throw a BadRequestException on error', async () => {
       const createLogDto: CreateLogDto = mockLog;
 
-      mockLogsService.create.mockRejectedValue(new BadRequestException('Error creating log'));
+      mockLogsService.create.mockRejectedValue(
+        new BadRequestException('Error creating log'),
+      );
 
-      await expect(controller.create(createLogDto)).rejects.toThrow(BadRequestException);
+      await expect(controller.create(createLogDto)).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 
@@ -80,9 +88,13 @@ describe('LogsController', () => {
       const page = 1;
       const limit = 10;
 
-      mockLogsService.findAll.mockRejectedValue(new InternalServerErrorException('Error retrieving logs'));
+      mockLogsService.findAll.mockRejectedValue(
+        new InternalServerErrorException('Error retrieving logs'),
+      );
 
-      await expect(controller.findAll(page, limit)).rejects.toThrow(InternalServerErrorException);
+      await expect(controller.findAll(page, limit)).rejects.toThrow(
+        InternalServerErrorException,
+      );
     });
   });
 
@@ -96,7 +108,9 @@ describe('LogsController', () => {
 
     it('should throw a NotFoundException if log is not found', async () => {
       const id = '1';
-      mockLogsService.findOne.mockRejectedValue(new NotFoundException('Log #1 not found'));
+      mockLogsService.findOne.mockRejectedValue(
+        new NotFoundException('Log #1 not found'),
+      );
 
       await expect(controller.findOne(id)).rejects.toThrow(NotFoundException);
     });
@@ -117,18 +131,26 @@ describe('LogsController', () => {
       const id = '1';
       const updateLogDto: CreateLogDto = mockLog;
 
-      mockLogsService.update.mockRejectedValue(new NotFoundException('Log #1 not found'));
+      mockLogsService.update.mockRejectedValue(
+        new NotFoundException('Log #1 not found'),
+      );
 
-      await expect(controller.update(id, updateLogDto)).rejects.toThrow(NotFoundException);
+      await expect(controller.update(id, updateLogDto)).rejects.toThrow(
+        NotFoundException,
+      );
     });
 
     it('should throw an InternalServerErrorException on error', async () => {
       const id = '1';
       const updateLogDto: CreateLogDto = mockLog;
 
-      mockLogsService.update.mockRejectedValue(new InternalServerErrorException('Error updating log'));
+      mockLogsService.update.mockRejectedValue(
+        new InternalServerErrorException('Error updating log'),
+      );
 
-      await expect(controller.update(id, updateLogDto)).rejects.toThrow(InternalServerErrorException);
+      await expect(controller.update(id, updateLogDto)).rejects.toThrow(
+        InternalServerErrorException,
+      );
     });
   });
 
@@ -142,16 +164,22 @@ describe('LogsController', () => {
 
     it('should throw a NotFoundException if log is not found', async () => {
       const id = '1';
-      mockLogsService.remove.mockRejectedValue(new NotFoundException('Log #1 not found'));
+      mockLogsService.remove.mockRejectedValue(
+        new NotFoundException('Log #1 not found'),
+      );
 
       await expect(controller.remove(id)).rejects.toThrow(NotFoundException);
     });
 
     it('should throw an InternalServerErrorException on error', async () => {
       const id = '1';
-      mockLogsService.remove.mockRejectedValue(new InternalServerErrorException('Error deleting log'));
+      mockLogsService.remove.mockRejectedValue(
+        new InternalServerErrorException('Error deleting log'),
+      );
 
-      await expect(controller.remove(id)).rejects.toThrow(InternalServerErrorException);
+      await expect(controller.remove(id)).rejects.toThrow(
+        InternalServerErrorException,
+      );
     });
   });
 });
