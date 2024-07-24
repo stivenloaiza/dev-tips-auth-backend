@@ -1,4 +1,4 @@
-name: Run Unit Tests
+name: Pipeline Coverage
 
 on:
   push:
@@ -6,27 +6,25 @@ on:
       - main
       - dev
      
-    
   pull_request:
     branches:
       - main
       - dev
-    
-   
+     
 
 jobs:
-  test:
-    name: test job
+  coverage:
+    name: Coverage analysis
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Use Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '20.14'
+          node-version: '20.10.0'
 
       - name: Install dependencies
         run: npm install
@@ -40,6 +38,6 @@ jobs:
       - name: Debug RUN_TESTS
         run: echo "RUN_TESTS is set to $RUN_TESTS"
 
-      - name: Run unit tests
+      - name: Run tests with coverage
         if: env.RUN_TESTS == 'true'
-        run: npm test
+        run: npm run test:cov
