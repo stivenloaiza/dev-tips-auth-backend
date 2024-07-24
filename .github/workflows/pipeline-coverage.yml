@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - main
-      - dev
+     
   pull_request:
     branches:
       - main
-      - dev
+     
 
 jobs:
   coverage:
@@ -30,7 +30,7 @@ jobs:
       - name: Read skip-tests configuration
         id: read_config
         run: |
-          skip_tests=$(jq '.skipTests' skip-tests.config.json)
+          skip_tests=$(jq '.skipTests' skip-test.config.json)
           echo "RUN_TESTS=${skip_tests}" >> $GITHUB_ENV
 
       - name: Debug RUN_TESTS
