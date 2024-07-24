@@ -2,6 +2,8 @@ import { LogsService } from './logs.service';
 import { Log } from './entities/logs.entity';
 import { BadRequestException, NotFoundException, InternalServerErrorException } from '@nestjs/common';
 import { CreateLogDto } from './dtos/createLogs.dto';
+import { Test, TestingModule } from '@nestjs/testing';
+import { getModelToken } from '@nestjs/mongoose';
 
 const mockLog = (id: string) => ({
   _id: id,
