@@ -221,7 +221,7 @@ describe('getApiKeys', () => {
   
       service = module.get<ApiKeySubscriptionService>(ApiKeySubscriptionService);
     });
-  
+
     describe('cancelApiKey', () => {
       it('should cancel the API key by setting isActive to false', async () => {
         apiKeySubscriptionModel.findByIdAndUpdate.mockReturnValue({
