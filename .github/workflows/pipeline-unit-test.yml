@@ -30,7 +30,7 @@ jobs:
 
       - name: Read skip-tests configuration
         id: read_config
-        run: 
+        run: |
           skip_tests=$(jq '.skipTests' skip-test.config.json)
           echo "RUN_TESTS=${skip_tests}" >> $GITHUB_ENV
 
