@@ -77,3 +77,37 @@ describe('LogsService', () => {
       expect(result).toEqual(createLogDto);
       expect(model.create).toHaveBeenCalledWith(createLogDto);
     });
+
+        it('should throw an error if log creation fails', async () => {
+      model.create.mockImplementationOnce(() => {
+        throw new Error('Error');
+      });
+      await expect(service.create({
+        ip: '127.0.0.1',
+        userId: 'user123',
+        endpoint: '/api/test',
+        system_name: 'TestSystem',
+        method: 'GET',
+        requestBody: {},
+        responseBody: {},
+        statusCode: 200,
+        timestamp: new Date(),
+      })).rejects.toThrow(BadRequestException);
+    });
+  });
+
+  describe('findAll', () => {
+    it('should return a list of logs', async () => {
+      model.find().exec = jest.fn().mockResolvedValue([mockLog('1'), mockLog('2')]);
+      const result = await service.findAll(1, 2);
+      expect(result).toEqual({ data: [mockLog('1'), mockLog('2')], total: 2 });
+      expect(model.find).toHaveBeenCalled();
+    });
+
+    it('should throw an error if logs retrieval fails', async () => {
+      model.find().exec = jest.fn().mockImplementationOnce(() => {
+        throw new Error('Error');
+      });
+      await expect(service.findAll()).rejects.toThrow(InternalServerErrorException);
+    });
+  });  
