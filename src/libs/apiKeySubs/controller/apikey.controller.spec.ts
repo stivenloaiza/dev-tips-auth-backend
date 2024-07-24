@@ -1,4 +1,3 @@
-
 import { ApiKeySubscriptionController } from './apikey.controller';
 import { CreateApiKeySubscriptionDto } from '../dtos/create-apy-key-subs.dto';
 import { InternalServerErrorException } from '@nestjs/common';
@@ -44,7 +43,9 @@ describe('ApiKeySubscriptionController', () => {
       ],
     }).compile();
 
-    controller = module.get<ApiKeySubscriptionController>(ApiKeySubscriptionController);
+    controller = module.get<ApiKeySubscriptionController>(
+      ApiKeySubscriptionController,
+    );
     service = module.get<ApiKeySubscriptionService>(ApiKeySubscriptionService);
   });
 
@@ -55,13 +56,39 @@ describe('ApiKeySubscriptionController', () => {
       const result = await controller.create(mockCreateApiKeySubscriptionDto);
 
       expect(result).toEqual(mockApiKeySubscription);
-      expect(service.create).toHaveBeenCalledWith(mockCreateApiKeySubscriptionDto);
+      expect(service.create).toHaveBeenCalledWith(
+        mockCreateApiKeySubscriptionDto,
+      );
     });
 
     it('should throw an InternalServerErrorException if an error occurs', async () => {
       jest.spyOn(service, 'create').mockRejectedValue(new Error('Test error'));
 
-      await expect(controller.create(mockCreateApiKeySubscriptionDto)).rejects.toThrow(InternalServerErrorException);
+      await expect(
+        controller.create(mockCreateApiKeySubscriptionDto),
+      ).rejects.toThrow(InternalServerErrorException);
+    });
+  });
+
+  describe('validateApiKey', () => {
+    it('should validate the API key and return the result', async () => {
+      const apiKey = 'validApiKey123';
+      const validationResult = true;
+      service.validateApiKey = jest.fn().mockResolvedValue(validationResult);  // Asegurarse de que el método exista
+
+      const result = await controller.validateApiKey(apiKey);
+
+      expect(result).toEqual(validationResult);
+      expect(service.validateApiKey).toHaveBeenCalledWith(apiKey);
+    });
+
+    it('should throw an InternalServerErrorException if an error occurs', async () => {
+      const apiKey = 'invalidApiKey123';
+      service.validateApiKey = jest.fn().mockRejectedValue(new Error('Test error'));  // Asegurarse de que el método exista
+
+      await expect(controller.validateApiKey(apiKey )).rejects.toThrow(InternalServerErrorException);
     });
   });
 });
+
+
