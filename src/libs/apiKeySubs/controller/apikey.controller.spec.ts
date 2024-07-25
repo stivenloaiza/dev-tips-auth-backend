@@ -1,4 +1,3 @@
-
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { ApiKeySubscriptionController } from './apikey.controller';
@@ -6,7 +5,6 @@ import { CreateApiKeySubscriptionDto } from '../dtos/create-apy-key-subs.dto';
 import { InternalServerErrorException } from '@nestjs/common';
 import { ApiKeySubscription } from '../entities/apiKeySubs.entity';
 import { ApiKeySubscriptionService } from '../service/apiKeySubs.service';
-
 
 describe('ApiKeySubscriptionController', () => {
   let controller: ApiKeySubscriptionController;
@@ -46,9 +44,9 @@ describe('ApiKeySubscriptionController', () => {
       ],
     }).compile();
 
-
-
-    controller = module.get<ApiKeySubscriptionController>(ApiKeySubscriptionController);
+    controller = module.get<ApiKeySubscriptionController>(
+      ApiKeySubscriptionController,
+    );
     service = module.get<ApiKeySubscriptionService>(ApiKeySubscriptionService);
   });
 
@@ -62,7 +60,6 @@ describe('ApiKeySubscriptionController', () => {
       expect(service.create).toHaveBeenCalledWith(
         mockCreateApiKeySubscriptionDto,
       );
-
     });
 
     it('should throw an InternalServerErrorException if an error occurs', async () => {
@@ -78,7 +75,7 @@ describe('ApiKeySubscriptionController', () => {
     it('should validate the API key and return the result', async () => {
       const apiKey = 'validApiKey123';
       const validationResult = true;
-      service.validateApiKey = jest.fn().mockResolvedValue(validationResult);  // Asegurarse de que el método exista
+      service.validateApiKey = jest.fn().mockResolvedValue(validationResult); // Asegurarse de que el método exista
 
       const result = await controller.validateApiKey(apiKey);
 
@@ -88,16 +85,22 @@ describe('ApiKeySubscriptionController', () => {
 
     it('should throw an InternalServerErrorException if an error occurs', async () => {
       const apiKey = 'invalidApiKey123';
-      service.validateApiKey = jest.fn().mockRejectedValue(new Error('Test error'));  // Asegurarse de que el método exista
+      service.validateApiKey = jest
+        .fn()
+        .mockRejectedValue(new Error('Test error')); // Asegurarse de que el método exista
 
-      await expect(controller.validateApiKey(apiKey )).rejects.toThrow(InternalServerErrorException);
+      await expect(controller.validateApiKey(apiKey)).rejects.toThrow(
+        InternalServerErrorException,
+      );
     });
   });
 
   describe('cancelApiKey', () => {
     it('should cancel the API key subscription and return the result', async () => {
       const id = 'validSubscriptionId';
-      const cancelResult = { message: 'API key subscription canceled successfully.' };
+      const cancelResult = {
+        message: 'API key subscription canceled successfully.',
+      };
       service.cancelApiKey = jest.fn().mockResolvedValue(cancelResult);
 
       const result = await controller.cancelApiKey(id);
@@ -108,9 +111,13 @@ describe('ApiKeySubscriptionController', () => {
 
     it('should throw an InternalServerErrorException if an error occurs', async () => {
       const id = 'invalidSubscriptionId';
-      service.cancelApiKey = jest.fn().mockRejectedValue(new Error('Test error'));
+      service.cancelApiKey = jest
+        .fn()
+        .mockRejectedValue(new Error('Test error'));
 
-      await expect(controller.cancelApiKey(id)).rejects.toThrow(InternalServerErrorException);
+      await expect(controller.cancelApiKey(id)).rejects.toThrow(
+        InternalServerErrorException,
+      );
     });
   });
 
@@ -147,8 +154,9 @@ describe('ApiKeySubscriptionController', () => {
       const type = 'premium';
       service.getApiKeys = jest.fn().mockRejectedValue(new Error('Test error'));
 
-      await expect(controller.getApiKeys(limit, type)).rejects.toThrow(InternalServerErrorException);
+      await expect(controller.getApiKeys(limit, type)).rejects.toThrow(
+        InternalServerErrorException,
+      );
     });
   });
 });
-
