@@ -84,6 +84,19 @@ export class ApiKeySubscriptionController {
   })
   @ApiBadRequestResponse({ description: 'Invalid subscription ID provided.' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error.' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        _id: {
+          type: 'string',
+          description: 'The ID of the API key subscription to be canceled',
+          example: '60d0fe4f5311236168a109ca',
+        },
+      },
+      required: ['_id'],
+    },
+  })
   async cancelApiKey(@Body('_id') id: string) {
     try {
       return await this.apiKeySubscriptionService.cancelApiKey(id);
