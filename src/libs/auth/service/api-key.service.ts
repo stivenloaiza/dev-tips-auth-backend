@@ -34,13 +34,12 @@ export class AuthService {
       return { key, isActive: newApiKey.isActive };
     } catch (error) {
       this.logger.error('Error creating API key', error.stack);
-      throw new InternalServerErrorException('Error creating API key');
     }
   }
 
   async getApiKey(id: string): Promise<ApiKey> {
     try {
-      const apiKey = await this.apiKeyModel.findById(id).exec();
+      const apiKey = await this.apiKeyModel.findById(id); // Sin exec
       if (!apiKey) {
         throw new NotFoundException('API Key not found');
       }
@@ -56,9 +55,11 @@ export class AuthService {
     updateApiKeyDto: UpdateApiKeyDto,
   ): Promise<ApiKey> {
     try {
-      const updatedApiKey = await this.apiKeyModel
-        .findByIdAndUpdate(id, updateApiKeyDto, { new: true })
-        .exec();
+      const updatedApiKey = await this.apiKeyModel.findByIdAndUpdate(
+        id,
+        updateApiKeyDto,
+        { new: true },
+      ); // Sin exec
       if (!updatedApiKey) {
         throw new NotFoundException('API Key not found');
       }
@@ -71,7 +72,7 @@ export class AuthService {
 
   async revokeApiKey(id: string): Promise<void> {
     try {
-      const apiKey = await this.apiKeyModel.findById(id).exec();
+      const apiKey = await this.apiKeyModel.findById(id); // Sin exec
       if (!apiKey) {
         throw new NotFoundException('API Key not found');
       }
@@ -88,8 +89,7 @@ export class AuthService {
       const apiKeys = await this.apiKeyModel
         .find({ isActive: true })
         .skip((page - 1) * limit)
-        .limit(limit)
-        .exec();
+        .limit(limit); // Sin exec
       if (!apiKeys.length) {
         throw new NotFoundException('No API keys found');
       }
@@ -102,7 +102,7 @@ export class AuthService {
 
   async validateApiKey(key: string): Promise<boolean> {
     try {
-      const apiKeys = await this.apiKeyModel.find({ isActive: true }).exec();
+      const apiKeys = await this.apiKeyModel.find({ isActive: true }); // Sin exec
       for (const apiKey of apiKeys) {
         const isMatch = await bcrypt.compare(key, apiKey.key);
         if (isMatch) {
@@ -139,9 +139,10 @@ export class AuthService {
 
   private async updateLastUsed(apiKeyId: string): Promise<void> {
     try {
-      await this.apiKeyModel
-        .findOneAndUpdate({ _id: apiKeyId }, { lastUsedAt: new Date() })
-        .exec();
+      await this.apiKeyModel.findOneAndUpdate(
+        { _id: apiKeyId },
+        { lastUsedAt: new Date() },
+      ); // Sin exec
     } catch (error) {
       this.logger.error(
         `Error updating lastUsedAt for id: ${apiKeyId}`,

@@ -7,6 +7,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { AuthService } from '../service/api-key.service';
+
 @Injectable()
 export class AuthGuard implements CanActivate {
   private readonly logger = new Logger(AuthGuard.name);
@@ -31,10 +32,11 @@ export class AuthGuard implements CanActivate {
         this.logger.log('API key is valid');
         return true;
       } catch (error) {
-        this.logger.error('Error validating API key', error);
+        this.logger.error('Error validating API key', error.stack);
         throw new InternalServerErrorException('Error validating API key');
       }
     } catch (error) {
+      this.logger.error('Unexpected error in AuthGuard', error.stack);
       throw new InternalServerErrorException(error.message);
     }
   }
